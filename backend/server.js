@@ -4,9 +4,11 @@ require('dotenv').config();
 const cors = require('cors');
 
 const connectDB = require("./db/db.js");
+const verifyToken = require("./middlewares/auth.js");
+
 const userRoutes = require("./routes/user.routes.js");
 const taskRoutes = require("./routes/task.routes.js");
-const verifyToken = require("./middlewares/auth.js");
+const teamRoutes = require("./routes/team.routes.js");
 
 app.use(cors());
 app.use(express.json());
@@ -14,12 +16,12 @@ app.use(express.urlencoded({extended: true}));
 
 connectDB();
 app.use("/users", userRoutes);
-// app.use("/tasks", taskRoutes);
+app.use("/tasks", taskRoutes);
+app.use("/teams", teamRoutes);
 
 app.get('/', verifyToken, (req, res) => {
     console.log("Poor Bro");
 
-    // console.log(req.user);
     res.status(200).json({
         message: "Logged In Successfully",
         token: req.token,
