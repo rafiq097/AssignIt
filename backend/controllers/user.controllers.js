@@ -3,11 +3,13 @@ const User = require("../models/user.model.js");
 
 const loginUser = async (req, res) => {
     try {
+        // await User.deleteMany({});
+        console.log(req.body);
         const { email, name } = req.body;
         if (!email || !name)
             return res.status(400).json({ message: "Incorrect Details" });
 
-        let user = await User.findOne({ email: email, name: name });
+        let user = await User.findOne({ email: email });
         if (!user) {
             user = new User({ email, name });
             await user.save();
