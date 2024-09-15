@@ -8,12 +8,11 @@ function TeamsPage() {
   const [members, setMembers] = useState([]);
 
   useEffect(() => {
-    // Fetch team details, tasks, and members
     const fetchTeamData = async () => {
       try {
-        const teamRes = await axios.get('http://localhost:5000/teams/'); // Replace with your team endpoint
-        const tasksRes = await axios.get('http://localhost:5000/tasks'); // Replace with your tasks endpoint
-        const membersRes = await axios.get('http://localhost:5000/members'); // Replace with your members endpoint
+        const teamRes = await axios.get('http://localhost:5000/teams/');
+        const tasksRes = await axios.get('http://localhost:5000/tasks');
+        const membersRes = await axios.get('http://localhost:5000/members');
 
         setTeam(teamRes.data);
         setTasks(tasksRes.data);
@@ -33,7 +32,6 @@ function TeamsPage() {
     <>
       <NavBar />
       <div className="container mx-auto p-6">
-        {/* Team Details */}
         <section className="mb-8 bg-white p-6 rounded-md shadow-md">
           <h2 className="text-2xl font-bold mb-4">Team Details</h2>
           {team ? (
@@ -50,11 +48,9 @@ function TeamsPage() {
           )}
         </section>
 
-        {/* Tasks Overview */}
         <section className="mb-8 bg-white p-6 rounded-md shadow-md">
           <h2 className="text-2xl font-bold mb-4">Tasks Overview</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Assigned Tasks */}
             <div className="bg-gray-100 p-4 rounded-md">
               <h3 className="text-xl font-semibold mb-4">Assigned Tasks</h3>
               {getTasksByStatus('assigned').length > 0 ? (
@@ -71,7 +67,6 @@ function TeamsPage() {
               )}
             </div>
 
-            {/* Ongoing Tasks */}
             <div className="bg-gray-100 p-4 rounded-md">
               <h3 className="text-xl font-semibold mb-4">Ongoing Tasks</h3>
               {getTasksByStatus('ongoing').length > 0 ? (
@@ -88,7 +83,6 @@ function TeamsPage() {
               )}
             </div>
 
-            {/* Completed Tasks */}
             <div className="bg-gray-100 p-4 rounded-md">
               <h3 className="text-xl font-semibold mb-4">Completed Tasks</h3>
               {getTasksByStatus('completed').length > 0 ? (
@@ -107,7 +101,6 @@ function TeamsPage() {
           </div>
         </section>
 
-        {/* List of Members */}
         <section className="bg-white p-6 rounded-md shadow-md">
           <h2 className="text-2xl font-bold mb-4">Members</h2>
           {members.length > 0 ? (

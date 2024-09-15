@@ -13,7 +13,11 @@ function HomePage() {
   useEffect(() => {
     const fetchTasksData = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/tasks/get`);
+        const token = localStorage.getItem("token");
+
+        const res = await axios.get(`http://localhost:5000/tasks/get`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setTasks(res.data.tasks);
       } catch (error) {
         console.error("Failed to fetch user teams and tasks", error);

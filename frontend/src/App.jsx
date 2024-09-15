@@ -54,7 +54,6 @@ function App() {
         <>
             {/* <NavBar /> */}
             <div className="flex flex-col md:flex-row h-screen">
-                {/* Left Section */}
                 <div className="w-full md:w-1/2 bg-white flex flex-col items-center justify-center p-8 text-center">
                     <h1 className="text-3xl md:text-4xl font-bold text-blue-500 mb-4">AssignIt</h1>
                     <p className="text-base md:text-lg text-gray-700 mb-2">
@@ -66,7 +65,6 @@ function App() {
                     </p>
                 </div>
 
-                {/* Right Section */}
                 <div className="w-full md:w-1/2 bg-blue-500 flex items-center justify-center p-8">
                     <div className="text-center">
                         {userData ? (

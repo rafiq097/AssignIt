@@ -1,7 +1,17 @@
 const Task = require("../models/task.model.js");
 const User = require("../models/user.model.js");
 
-const getTasks = async (req, res) => {
+const getUserTasks = async (req, res) => {
+    try {
+        const tasks = await Task.find({ assignedToEmail: req.user.email });
+        res.status(200).json({ tasks });
+    }
+    catch (error) {
+        res.status(500).json({ message: error });
+    }
+};
+
+const getAllTasks = async (req, res) => {
     try {
         const tasks = await Task.find({});
         res.status(200).json({ tasks });
@@ -14,13 +24,12 @@ const getTasks = async (req, res) => {
 const createTask = async (req, res) => {
     try {
         const { assignedToEmail } = req.body;
-        
-        if(assignedToEmail)
-        {
+
+        if (assignedToEmail) {
             const user = await User.findOne({ email: assignedToEmail });
-            if(!user)
+            if (!user)
                 return res.status(404).json({ message: "No such user found" });
-            
+
             const task = await Task.create(req.body);
             task.assignedTo = user._id;
             await task.save();
@@ -30,8 +39,7 @@ const createTask = async (req, res) => {
 
             res.status(201).json({ task });
         }
-        else
-        {
+        else {
             const task = await Task.create(req.body);
             await task.save();
 
@@ -55,7 +63,7 @@ const updateTask = async (req, res) => {
         //     if(!user)
         //         return res.status(404).json({ message: 'User not found' });
         // }
-        const task = await Task.findOneAndUpdate( taskID, req.body, { runValidators: true });
+        const task = await Task.findOneAndUpdate(taskID, req.body, { runValidators: true });
         console.log(task);
         if (!task)
             return res.status(404).json({ message: "No Such Task" });
@@ -83,4 +91,4 @@ const deleteTask = async (req, res) => {
     }
 };
 
-module.exports = { createTask, getTasks, updateTask, deleteTask };
+module.exports = { createTask, getUserTasks, getAllTasks, updateTask, deleteTask };

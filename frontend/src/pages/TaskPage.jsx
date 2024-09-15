@@ -8,20 +8,19 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 const TaskPage = () => {
-  const [tasks, setTasks] = useRecoilState(tasksAtom); // Use Recoil state to manage tasks
-  const [isEditing, setIsEditing] = useState(false);   // To toggle between create and edit
+  const [tasks, setTasks] = useRecoilState(tasksAtom);
+  const [isEditing, setIsEditing] = useState(false);
   const [taskForm, setTaskForm] = useState({ title: "", status: "Assigned" });
   const [currentTaskId, setCurrentTaskId] = useState(null);
 
   useEffect(() => {
-    // Simulate fetch tasks from the server
     fetchTasks();
   }, []);
 
   const fetchTasks = async () => {
     try {
       const res = await axios.get("http://localhost:5000/tasks/get");
-      setTasks(res.data.tasks); // Assume API returns tasks
+      setTasks(res.data.tasks);
     } catch (err) {
       toast.error("Failed to fetch tasks");
     }
@@ -152,7 +151,6 @@ const TaskPage = () => {
   );
 };
 
-// TaskColumn Component for each task section
 const TaskColumn = ({ title, tasks, editTask, deleteTask }) => {
   return (
     <div className="bg-white shadow-md rounded-md p-4 w-1/3">

@@ -1,8 +1,26 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import { useRecoilState } from "recoil";
+import { userAtom } from "../state/userAtom.js";
+import { useNavigate, Link } from "react-router-dom";
 
 function NavBar() {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const [userData, setUserData] = useRecoilState(userAtom);
+
+  const handleLogout = async () => {
+    try {
+      localStorage.removeItem("token");
+      setUserData(null);
+
+      toast.success("Logout successful");
+      navigate("/");
+    } catch (error) {
+      toast.error("Error while logging out");
+      console.error("Logout failed", error);
+    }
+  };
 
   return (
     <nav className="bg-blue-500 p-4">
@@ -45,19 +63,19 @@ function NavBar() {
                 Home
               </Link>
               <Link
-                to="/teams"
-                className="block px-4 py-2 text-blue-500 hover:bg-gray-100"
-                onClick={() => setIsOpen(false)}
-              >
-                Teams
-              </Link>
-              <Link
                 to="/dashboard"
                 className="block px-4 py-2 text-blue-500 hover:bg-gray-100"
                 onClick={() => setIsOpen(false)}
               >
                 Dashboard
               </Link>
+
+              <button
+                className="block px-4 py-2 text-blue-500 hover:bg-gray-100"
+                onClick={handleLogout}
+              >
+                LogOut
+              </button>
             </div>
           )}
         </div>
@@ -73,6 +91,25 @@ function NavBar() {
           <Link to="/dashboard" className="text-white hover:text-gray-200">
             Dashboard
           </Link>
+          <button
+            onClick={handleLogout}
+            className="text-white ml-4 focus:outline-none"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M17 16l4-4m0 0l-4-4m4 4H7m10 4a2 2 0 01-2-2v-2a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2z"
+              ></path>
+            </svg>
+          </button>
         </div>
       </div>
     </nav>
