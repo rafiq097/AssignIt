@@ -9,7 +9,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage.jsx";
 import TaskPage from "./pages/TaskPage.jsx";
 import TeamPage from "./pages/TeamPage.jsx";
-import AdminPage from "./pages/AdminPage.jsx";
+import DashboardPage from "./pages/DashboardPage.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -22,7 +22,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="/home" element={<HomePage />} />
             {/* <Route path="/tasks" element={<TaskPage />} /> */}
             {/* <Route path="/teams" element={<TeamPage />} /> */}
-            <Route path="/dashboard" element={<AdminPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
           </Routes>
         </BrowserRouter>
         <Toaster />
