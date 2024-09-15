@@ -18,7 +18,7 @@ const teamSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Task'
     }]
-});
+}, { timestamps: true });
 
 const Team = mongoose.model("Team", teamSchema);
 
