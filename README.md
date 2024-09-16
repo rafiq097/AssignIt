@@ -11,9 +11,12 @@ Follow these steps to get the frontend server up and running:
 First, clone the repository from GitHub to your local machine:
 
 ```bash
-git clone https://github.com/your-username/taskify.git
+git clone https://github.com/rafiq097/taskify.git
+
 cd taskify/frontend
+
 npm install
+
 npm run dev
 ```
 
