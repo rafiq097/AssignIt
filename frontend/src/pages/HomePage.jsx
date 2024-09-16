@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import axios from "axios";
-import { tasksAtom } from "../state/tasksAtom.js";
+// import { tasksAtom } from "../state/tasksAtom.js";
 import { userAtom } from "../state/userAtom";
 import NavBar from "../components/NavBar";
 import toast from "react-hot-toast";
