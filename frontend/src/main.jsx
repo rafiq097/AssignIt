@@ -7,8 +7,8 @@ import { Toaster } from "react-hot-toast";
 import { RecoilRoot } from "recoil";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage.jsx";
-import TaskPage from "./pages/TaskPage.jsx";
-import TeamPage from "./pages/TeamPage.jsx";
+// import TaskPage from "./pages/TaskPage.jsx";
+// import TeamPage from "./pages/TeamPage.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
 
 createRoot(document.getElementById("root")).render(
