@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require('path');
 const app = express();
 require('dotenv').config();
 const cors = require('cors');
@@ -10,7 +11,14 @@ const userRoutes = require("./routes/user.routes.js");
 const taskRoutes = require("./routes/task.routes.js");
 // const teamRoutes = require("./routes/team.routes.js");
 
-app.use(cors());
+app.use(express.static(path.join(__dirname, '..', 'frontend', 'dist')));
+
+// app.use(cors());
+app.use(cors({
+    origin: '*',
+    methods: 'GET,POST',
+    allowedHeaders: 'Content-Type,Authorization'
+}));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
@@ -19,14 +27,18 @@ app.use("/users", userRoutes);
 app.use("/tasks", taskRoutes);
 // app.use("/teams", teamRoutes);
 
-app.get('/', verifyToken, (req, res) => {
-    console.log("Poor Bro");
+app.get('/verify', verifyToken, (req, res) => {
+    console.log("Token Verified");
 
     res.status(200).json({
         message: "Logged In Successfully",
         token: req.token,
         user: req.user
     })
+});
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'frontend', 'dist', 'index.html'));
 });
 
 const PORT = process.env.PORT || 5000;

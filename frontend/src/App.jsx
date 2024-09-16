@@ -18,7 +18,7 @@ function App() {
     const token = localStorage.getItem("token");
     if (token) {
       axios
-        .get("http://localhost:5000/", {
+        .get("/verify", {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
@@ -35,17 +35,20 @@ function App() {
 
   const loginUser = async () => {
     try {
+      console.log("login called");
       const res = await axios.post("http://localhost:5000/users/login", {
         email: loginData.email,
         name: loginData.given_name,
       });
 
+      console.log(res);
       localStorage.setItem("token", res.data.token);
       setUserData(res.data.user);
       toast.success("Login Success");
       navigate("/home");
     } catch (err) {
       console.log(err.message);
+      console.log(err);
       toast.error("Please try again...");
     }
   };
@@ -77,6 +80,7 @@ function App() {
               <>
                 <GoogleLogin
                   onSuccess={(res) => {
+                    console.log("called");
                     let x = jwtDecode(res?.credential);
                     setLoginData(x);
                     loginUser();

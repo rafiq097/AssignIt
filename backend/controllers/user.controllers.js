@@ -2,8 +2,8 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user.model.js");
 
 const loginUser = async (req, res) => {
+    console.log("login called");
     try {
-        // await User.deleteMany({});
         console.log(req.body);
         const { email, name } = req.body;
         if (!email || !name)
