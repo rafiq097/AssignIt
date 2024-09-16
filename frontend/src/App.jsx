@@ -36,7 +36,7 @@ function App() {
   const loginUser = async () => {
     try {
       console.log("login called");
-      const res = await axios.post("http://localhost:5000/users/login", {
+      const res = await axios.post("https://assignit.onrender.com/users/login", {
         email: loginData.email,
         name: loginData.given_name,
       });
