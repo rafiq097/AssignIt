@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import axios from "axios";
 import { userAtom } from "../state/userAtom.js";
 import NavBar from "../components/NavBar.jsx";
@@ -12,12 +12,13 @@ import CompletedTask from "../components/CompletedTask.jsx";
 function DashboardPage() {
   const [tasks, setTasks] = useState([]);
   const [users, setUsers] = useState([]);
-  const [user] = useRecoilState(userAtom);
+  const [userData, setUserData] = useState({});
+  const [selectedUser, setSelectedUser] = useState("");
 
   useEffect(() => {
     const fetchTasksData = async () => {
       try {
-        const res = await axios.get("https://assignit.onrender.com/tasks/gettasks");
+        const res = await axios.get("http://localhost:5000/tasks/gettasks");
         setTasks(res.data.tasks);
       } catch (error) {
         console.error("Failed to fetch tasks", error);
@@ -26,20 +27,33 @@ function DashboardPage() {
 
     const fetchUsersData = async () => {
       try {
-        const res = await axios.get("https://assignit.onrender.com/users/getusers");
+        const res = await axios.get("http://localhost:5000/users/getusers");
         setUsers(res.data.users);
       } catch (error) {
         console.error("Failed to fetch users", error);
       }
     };
 
+    const updateAdminStatus = async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        const res = await axios.get(`http://localhost:5000/verify`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        setUserData(res.data.user);
+      } catch {}
+    };
+
     fetchTasksData();
     fetchUsersData();
+    updateAdminStatus();
   }, []);
 
   const updateTaskStatus = async (taskId, status) => {
     try {
-      await axios.put(`https://assignit.onrender.com/tasks/update/${taskId}`, {
+      await axios.put(`http://localhost:5000/tasks/update/${taskId}`, {
         status,
       });
       setTasks((prevTasks) =>
@@ -60,7 +74,7 @@ function DashboardPage() {
     }
 
     try {
-      await axios.put(`https://assignit.onrender.com/tasks/update/${taskId}`, {
+      await axios.put(`http://localhost:5000/tasks/update/${taskId}`, {
         assignedToEmail: email,
       });
       setTasks((prevTasks) =>
@@ -79,12 +93,45 @@ function DashboardPage() {
     }
   };
 
+  const handleUpdateAdmin = async () => {
+    console.log(selectedUser);
+    if (!selectedUser) {
+      toast.error("Please select a user");
+      return;
+    }
+
+    try {
+      await axios.put(`http://localhost:5000/users/updateAdmin/${selectedUser}`);
+      toast.success("User updated to admin");
+    } catch (error) {
+      console.error("Failed to update user:", error);
+      toast.error("Failed to update user");
+    }
+  };
+
+  if (!userData?.admin) {
+    return (
+      <>
+        {console.log(userData)}
+        <NavBar />
+        <div className="flex items-center justify-center h-screen bg-gray-100">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-black-600">
+              Only admins can view this page
+            </h1>
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <NavBar />
 
       <AddTodo />
 
+      {console.log(userData)}
       <div className="container mx-auto p-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Assigned Tasks */}
@@ -141,6 +188,37 @@ function DashboardPage() {
               ))}
           </div>
         </div>
+      </div>
+
+      <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg">
+        <h2 className="text-2xl font-bold mb-4 text-gray-800">Manage Admins</h2>
+        <div className="mb-4">
+          <label
+            htmlFor="user-select"
+            className="block text-gray-700 font-medium mb-2"
+          >
+            Select User:
+          </label>
+          <select
+            id="user-select"
+            value={selectedUser}
+            onChange={(e) => setSelectedUser(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">Select a user</option>
+            {users.map((user) => (
+              <option key={user._id} value={user._id}>
+                {user.email}
+              </option>
+            ))}
+          </select>
+        </div>
+        <button
+          className="w-full bg-blue-500 text-white py-2 px-4 rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onClick={handleUpdateAdmin}
+        >
+          Make Admin
+        </button>
       </div>
     </>
   );

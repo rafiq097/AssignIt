@@ -36,14 +36,15 @@ function App() {
   const loginUser = async () => {
     try {
       console.log("login called");
-      const res = await axios.post("https://assignit.onrender.com/users/login", {
+      const res = await axios.post("http://localhost:5000/users/login", {
         email: loginData.email,
         name: loginData.given_name,
       });
 
       console.log(res);
       localStorage.setItem("token", res.data.token);
-      setUserData(res.data.user);
+      await setUserData(res.data.user);
+      
       toast.success("Login Success");
       navigate("/home");
     } catch (err) {
