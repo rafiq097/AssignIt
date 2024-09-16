@@ -54,8 +54,10 @@ const createTask = async (req, res) => {
 
 const updateTask = async (req, res) => {
     console.log(req.body);
+    console.log(req.params);
     try {
-        const { taskID } = req.params.id;
+        const id = req.params.id;
+        console.log(id);
         // const { assignedToEmail } = req.body;
         // if(assignedToEmail)
         // {
@@ -63,7 +65,7 @@ const updateTask = async (req, res) => {
         //     if(!user)
         //         return res.status(404).json({ message: 'User not found' });
         // }
-        const task = await Task.findOneAndUpdate(taskID, req.body, { runValidators: true });
+        const task = await Task.findOneAndUpdate({_id: id}, req.body, { new: true, runValidators: true });
         console.log(task);
         if (!task)
             return res.status(404).json({ message: "No Such Task" });
@@ -72,6 +74,7 @@ const updateTask = async (req, res) => {
         res.status(200).json({ task: task, success: "Successful" });
     }
     catch (error) {
+        console.log(error.message);
         res.status(500).json({ message: error });
     }
 };
