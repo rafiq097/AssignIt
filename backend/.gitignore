@@ -1,2 +1,6 @@
 .env
 node_modules/
+
+/routes/team.routes.js
+/models/team.model.js
+/controllers/team.controllers.js
