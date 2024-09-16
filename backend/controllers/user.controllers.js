@@ -64,8 +64,14 @@ const addAdmin = async (req, res) => {
             return res.status(400).json({ message: 'User ID is required' });
         }
 
-        // let tempUser = await User.findOne({ email: email });
-        const user = await User.findByIdAndUpdate(id, { admin: true }, { new: true, runValidators: true });
+        let tempUser = await User.findById(id);
+        if (!tempUser) {
+        return res.status(404).json({ message: 'User not found' });
+        }
+
+        let admin = !tempUser.admin;
+
+        const user = await User.findByIdAndUpdate(id, { admin: admin }, { new: true, runValidators: true });
         console.log(user);
 
         if (!user) {

@@ -117,7 +117,7 @@ function DashboardPage() {
         <div className="flex items-center justify-center h-screen bg-gray-100">
           <div className="text-center">
             <h1 className="text-3xl font-bold text-black-600">
-              Only admins can view this page
+              {/* Only admins can view this page */}
             </h1>
           </div>
         </div>

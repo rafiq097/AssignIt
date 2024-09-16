@@ -1,14 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useRecoilState } from "recoil";
 import { userAtom } from "../state/userAtom.js";
 import { useNavigate, Link } from "react-router-dom";
 import { MdLogout } from "react-icons/md";
+import axios from "axios";
 
 function NavBar() {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const [userData, setUserData] = useRecoilState(userAtom);
+  const [userData, setUserData] = useState({});
+
+  useEffect(() => {
+    const updateAdminStatus = async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        const res = await axios.get(`https://assignit.onrender.com/verify`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        setUserData(res.data.user);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    updateAdminStatus();
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -17,6 +36,7 @@ function NavBar() {
 
       toast.success("Logout successful");
       navigate("/");
+      window.location.href = '/';
     } catch (error) {
       toast.error("Error while logging out");
       console.error("Logout failed", error);
@@ -63,13 +83,15 @@ function NavBar() {
               >
                 Home
               </Link>
-              <Link
-                to="/dashboard"
-                className="block px-4 py-2 text-blue-500 hover:bg-gray-100"
-                onClick={() => setIsOpen(false)}
-              >
-                Dashboard
-              </Link>
+              {userData.admin && 
+                <Link
+                  to="/dashboard"
+                  className="block px-4 py-2 text-blue-500 hover:bg-gray-100"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Dashboard
+                </Link>
+              }
 
               <button
                 className="block px-4 py-2 text-blue-500 hover:bg-gray-100"
@@ -81,16 +103,16 @@ function NavBar() {
           )}
         </div>
 
+        {/* Links for Desktop */}
         <div className="hidden md:flex items-center space-x-6">
           <Link to="/home" className="text-white hover:text-gray-200">
             Home
           </Link>
-          {/* <Link to="/teams" className="text-white hover:text-gray-200">
-            Teams
-          </Link> */}
-          <Link to="/dashboard" className="text-white hover:text-gray-200">
-            Dashboard
-          </Link>
+          {userData.admin && (
+            <Link to="/dashboard" className="text-white hover:text-gray-200">
+              Dashboard
+            </Link>
+          )}
           <div className="flex items-center space-x-3">
             <button
               className="flex items-center text-white hover:text-gray-200"
