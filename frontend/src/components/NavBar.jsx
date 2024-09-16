@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import { useRecoilState } from "recoil";
 import { userAtom } from "../state/userAtom.js";
 import { useNavigate, Link } from "react-router-dom";
+import { MdLogout } from "react-icons/md";
 
 function NavBar() {
   const navigate = useNavigate();
@@ -80,7 +81,6 @@ function NavBar() {
           )}
         </div>
 
-        {/* Links for Desktop */}
         <div className="hidden md:flex items-center space-x-6">
           <Link to="/home" className="text-white hover:text-gray-200">
             Home
@@ -91,25 +91,15 @@ function NavBar() {
           <Link to="/dashboard" className="text-white hover:text-gray-200">
             Dashboard
           </Link>
-          <button
-            onClick={handleLogout}
-            className="text-white ml-4 focus:outline-none"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
+          <div className="flex items-center space-x-3">
+            <button
+              className="flex items-center text-white hover:text-gray-200"
+              onClick={handleLogout}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M17 16l4-4m0 0l-4-4m4 4H7m10 4a2 2 0 01-2-2v-2a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2z"
-              ></path>
-            </svg>
-          </button>
+              <span>Logout</span>
+              <MdLogout size={22} />
+            </button>
+          </div>
         </div>
       </div>
     </nav>

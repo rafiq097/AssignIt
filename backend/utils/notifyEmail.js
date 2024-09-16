@@ -1,10 +1,9 @@
-const express = require("express");
 const nodemailer = require("nodemailer");
-const router = express.Router();
+require('dotenv').config();
 const Task = require("../models/task.model.js");
 
 const transporter = nodemailer.createTransport({
-    service: "Gmail",
+    service: "gmail",
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
