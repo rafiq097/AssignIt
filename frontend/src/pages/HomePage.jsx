@@ -15,7 +15,7 @@ function HomePage() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await axios.get(`/tasks/get`, {
+        const res = await axios.get(`https://assignit.onrender.com/tasks/get`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setTasks(res.data.tasks);
@@ -29,7 +29,7 @@ function HomePage() {
 
   const updateTaskStatus = async (taskId, status) => {
     try {
-      await axios.put(`/tasks/update/${taskId}`, {
+      await axios.put(`https://assignit.onrender.com/tasks/update/${taskId}`, {
         status,
       });
       setTasks((prevTasks) =>

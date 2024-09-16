@@ -17,7 +17,7 @@ function DashboardPage() {
   useEffect(() => {
     const fetchTasksData = async () => {
       try {
-        const res = await axios.get("/tasks/gettasks");
+        const res = await axios.get("https://assignit.onrender.com/tasks/gettasks");
         setTasks(res.data.tasks);
       } catch (error) {
         console.error("Failed to fetch tasks", error);
@@ -26,7 +26,7 @@ function DashboardPage() {
 
     const fetchUsersData = async () => {
       try {
-        const res = await axios.get("/users/getusers");
+        const res = await axios.get("https://assignit.onrender.com/users/getusers");
         setUsers(res.data.users);
       } catch (error) {
         console.error("Failed to fetch users", error);
@@ -39,7 +39,7 @@ function DashboardPage() {
 
   const updateTaskStatus = async (taskId, status) => {
     try {
-      await axios.put(`/tasks/update/${taskId}`, {
+      await axios.put(`https://assignit.onrender.com/tasks/update/${taskId}`, {
         status,
       });
       setTasks((prevTasks) =>
@@ -60,7 +60,7 @@ function DashboardPage() {
     }
 
     try {
-      await axios.put(`/tasks/update/${taskId}`, {
+      await axios.put(`https://assignit.onrender.com/tasks/update/${taskId}`, {
         assignedToEmail: email,
       });
       setTasks((prevTasks) =>

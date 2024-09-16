@@ -15,7 +15,7 @@ const AssignedTask = ({ task, updateTaskStatus, updateTaskAssignedTo, users }) =
 
   const notifyEmail = async () => {
     try {
-      await axios.post("/tasks/notify", {
+      await axios.post("https://assignit.onrender.com/tasks/notify", {
         taskId: task._id,
         assignedToEmail: selectedUser,
       });
