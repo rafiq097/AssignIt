@@ -15,7 +15,7 @@ const AssignedTask = ({ task, updateTaskStatus, updateTaskAssignedTo, users }) =
 
   const notifyEmail = async () => {
     try {
-      await axios.post("http://localhost:5000/tasks/notify", {
+      await axios.post("/tasks/notify", {
         taskId: task._id,
         assignedToEmail: selectedUser,
       });

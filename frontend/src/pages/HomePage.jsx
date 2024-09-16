@@ -15,7 +15,7 @@ function HomePage() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await axios.get(`http://localhost:5000/tasks/get`, {
+        const res = await axios.get(`/tasks/get`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setTasks(res.data.tasks);
@@ -29,7 +29,7 @@ function HomePage() {
 
   const updateTaskStatus = async (taskId, status) => {
     try {
-      await axios.put(`http://localhost:5000/tasks/update/${taskId}`, {
+      await axios.put(`/tasks/update/${taskId}`, {
         status,
       });
       setTasks((prevTasks) =>
