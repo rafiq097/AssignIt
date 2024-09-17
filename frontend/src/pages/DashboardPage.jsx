@@ -8,17 +8,19 @@ import AddTodo from "../components/AddTodo.jsx";
 import AssignedTask from "../components/AssignedTask.jsx";
 import OngoingTask from "../components/OngoingTask.jsx";
 import CompletedTask from "../components/CompletedTask.jsx";
+import Spinner from "../components/Spinner.jsx";
 
 function DashboardPage() {
   const [tasks, setTasks] = useState([]);
   const [users, setUsers] = useState([]);
   const [userData, setUserData] = useState({});
   const [selectedUser, setSelectedUser] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchTasksData = async () => {
       try {
-        const res = await axios.get("https://assignit.onrender.com/tasks/gettasks");
+        const res = await axios.get("/tasks/gettasks");
         setTasks(res.data.tasks);
       } catch (error) {
         console.error("Failed to fetch tasks", error);
@@ -27,7 +29,7 @@ function DashboardPage() {
 
     const fetchUsersData = async () => {
       try {
-        const res = await axios.get("https://assignit.onrender.com/users/getusers");
+        const res = await axios.get("/users/getusers");
         setUsers(res.data.users);
       } catch (error) {
         console.error("Failed to fetch users", error);
@@ -38,7 +40,7 @@ function DashboardPage() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await axios.get(`https://assignit.onrender.com/verify`, {
+        const res = await axios.get(`/verify`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -53,7 +55,7 @@ function DashboardPage() {
 
   const updateTaskStatus = async (taskId, status) => {
     try {
-      await axios.put(`https://assignit.onrender.com/tasks/update/${taskId}`, {
+      await axios.put(`/tasks/update/${taskId}`, {
         status,
       });
       setTasks((prevTasks) =>
@@ -74,7 +76,7 @@ function DashboardPage() {
     }
 
     try {
-      await axios.put(`https://assignit.onrender.com/tasks/update/${taskId}`, {
+      await axios.put(`/tasks/update/${taskId}`, {
         assignedToEmail: email,
       });
       setTasks((prevTasks) =>
@@ -101,13 +103,20 @@ function DashboardPage() {
     }
 
     try {
-      await axios.put(`https://assignit.onrender.com/users/updateAdmin/${selectedUser}`);
+      await axios.put(`/users/updateAdmin/${selectedUser}`);
       toast.success("User updated to admin");
     } catch (error) {
       console.error("Failed to update user:", error);
       toast.error("Failed to update user");
     }
   };
+  
+  if (loading)
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Spinner />
+      </div>
+    );
 
   if (!userData?.admin) {
     return (

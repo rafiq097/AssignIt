@@ -7,9 +7,18 @@ import { Toaster } from "react-hot-toast";
 import { RecoilRoot } from "recoil";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage.jsx";
-// import TaskPage from "./pages/TaskPage.jsx";
-// import TeamPage from "./pages/TeamPage.jsx";
+import axios from "axios";
 import DashboardPage from "./pages/DashboardPage.jsx";
+
+axios.interceptors.request.use(
+  function (config) {
+    config.baseURL = "https://assignit.onrender.com";
+    return config;
+  },
+  function (error) {
+    return Promise.reject(error);
+  }
+);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

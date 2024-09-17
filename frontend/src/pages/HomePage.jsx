@@ -5,22 +5,27 @@ import axios from "axios";
 import { userAtom } from "../state/userAtom";
 import NavBar from "../components/NavBar";
 import toast from "react-hot-toast";
+import Spinner from "../components/Spinner.jsx";
 
 function HomePage() {
   const [tasks, setTasks] = useState([]);
   const [user] = useRecoilState(userAtom);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchTasksData = async () => {
       try {
+        setLoading(true);
         const token = localStorage.getItem("token");
 
-        const res = await axios.get(`https://assignit.onrender.com/tasks/get`, {
+        const res = await axios.get(`/tasks/get`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setTasks(res.data.tasks);
       } catch (error) {
         console.error("Failed to fetch user teams and tasks", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -29,7 +34,8 @@ function HomePage() {
 
   const updateTaskStatus = async (taskId, status) => {
     try {
-      await axios.put(`https://assignit.onrender.com/tasks/update/${taskId}`, {
+      setLoading(true);
+      await axios.put(`/tasks/update/${taskId}`, {
         status,
       });
       setTasks((prevTasks) =>
@@ -41,8 +47,17 @@ function HomePage() {
     } catch (error) {
       console.error("Failed to update task status", error);
       toast.error("Failed to update task. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading)
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Spinner />
+      </div>
+    );
 
   return (
     <>

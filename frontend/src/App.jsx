@@ -8,15 +8,18 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { userAtom } from "./state/userAtom.js";
 import { useNavigate } from "react-router-dom";
 import NavBar from "./components/NavBar.jsx";
+import Spinner from "./components/Spinner.jsx";
 
 function App() {
   const [loginData, setLoginData] = useState({});
   const [userData, setUserData] = useRecoilState(userAtom);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
+      setLoading(true);
       axios
         .get("/verify", {
           headers: { Authorization: `Bearer ${token}` },
@@ -29,22 +32,30 @@ function App() {
           console.log(err.message);
           localStorage.removeItem("token");
           setUserData(null);
+        })
+        .finally(() => {
+          setLoading(false);
         });
     }
   }, [setUserData, navigate]);
 
-  const loginUser = async () => {
+  const handleLogin = async (x) => {
     try {
       console.log("login called");
-      const res = await axios.post("https://assignit.onrender.com/users/login", {
-        email: loginData.email,
-        name: loginData.given_name,
-      });
+      await setLoginData(x);
+
+      const res = await axios.post(
+        "/users/login",
+        {
+          email: loginData.email,
+          name: loginData.given_name,
+        }
+      );
 
       console.log(res);
       localStorage.setItem("token", res.data.token);
       await setUserData(res.data.user);
-      
+
       toast.success("Login Success");
       navigate("/home");
     } catch (err) {
@@ -75,7 +86,9 @@ function App() {
 
         <div className="w-full md:w-1/2 bg-blue-500 flex items-center justify-center p-8">
           <div className="text-center">
-            {userData ? (
+            {loading ? (
+              <Spinner />
+            ) : userData ? (
               <UserProfile />
             ) : (
               <>
@@ -83,8 +96,7 @@ function App() {
                   onSuccess={(res) => {
                     console.log("called");
                     let x = jwtDecode(res?.credential);
-                    setLoginData(x);
-                    loginUser();
+                    handleLogin(x);
                   }}
                   onError={(err) => {
                     console.log(err, "Login Failed");

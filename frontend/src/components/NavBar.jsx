@@ -5,24 +5,30 @@ import { userAtom } from "../state/userAtom.js";
 import { useNavigate, Link } from "react-router-dom";
 import { MdLogout } from "react-icons/md";
 import axios from "axios";
+import Spinner from "../components/Spinner.jsx";
 
 function NavBar() {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [userData, setUserData] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const updateAdminStatus = async () => {
       try {
+        setLoading(true);
         const token = localStorage.getItem("token");
 
-        const res = await axios.get(`https://assignit.onrender.com/verify`, {
+        const res = await axios.get(`/verify`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
         setUserData(res.data.user);
       } catch (error) {
         console.error("Error fetching user data:", error);
+      }
+      finally{
+        setLoading(false);
       }
     };
 
@@ -42,6 +48,14 @@ function NavBar() {
       console.error("Logout failed", error);
     }
   };
+
+  if (loading)
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Spinner />
+      </div>
+    );
+  
 
   return (
     <nav className="bg-blue-500 p-4">

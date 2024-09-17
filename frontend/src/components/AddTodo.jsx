@@ -15,7 +15,7 @@ const AddTodo = () => {
       try
       {
         const newTask = { title, description };
-        await axios.post('https://assignit.onrender.com/tasks/create', newTask);
+        await axios.post('/tasks/create', newTask);
         toast.success("Task created successfully!");
         setTitle('');
         setDescription('');
