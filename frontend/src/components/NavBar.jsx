@@ -14,7 +14,7 @@ function NavBar() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const updateAdminStatus = async () => {
+    const updateRoleStatus = async () => {
       try {
         setLoading(true);
         const token = localStorage.getItem("token");
@@ -32,7 +32,7 @@ function NavBar() {
       }
     };
 
-    updateAdminStatus();
+    updateRoleStatus();
   }, []);
 
   const handleLogout = async () => {
@@ -97,7 +97,7 @@ function NavBar() {
               >
                 Home
               </Link>
-              {userData.admin && 
+              {userData.role != "user" && 
                 <Link
                   to="/dashboard"
                   className="block px-4 py-2 text-blue-500 hover:bg-gray-100"
@@ -122,7 +122,7 @@ function NavBar() {
           <Link to="/home" className="text-white hover:text-gray-200">
             Home
           </Link>
-          {userData.admin && (
+          {userData.role != "user" && (
             <Link to="/dashboard" className="text-white hover:text-gray-200">
               Dashboard
             </Link>

@@ -36,7 +36,7 @@ function DashboardPage() {
       }
     };
 
-    const updateAdminStatus = async () => {
+    const updateRoleStatus = async () => {
       try {
         const token = localStorage.getItem("token");
 
@@ -50,7 +50,7 @@ function DashboardPage() {
 
     fetchTasksData();
     fetchUsersData();
-    updateAdminStatus();
+    updateRoleStatus();
   }, []);
 
   const updateTaskStatus = async (taskId, status) => {
@@ -95,7 +95,7 @@ function DashboardPage() {
     }
   };
 
-  const handleUpdateAdmin = async () => {
+  const handleUpdateRole = async () => {
     console.log(selectedUser);
     if (!selectedUser) {
       toast.error("Please select a user");
@@ -103,8 +103,8 @@ function DashboardPage() {
     }
 
     try {
-      await axios.put(`/users/updateAdmin/${selectedUser}`);
-      toast.success("User updated to admin");
+      await axios.put(`/users/updateRole/${selectedUser}`);
+      toast.success("User Role updated");
     } catch (error) {
       console.error("Failed to update user:", error);
       toast.error("Failed to update user");
@@ -118,7 +118,7 @@ function DashboardPage() {
       </div>
     );
 
-  if (!userData?.admin) {
+  if (userData?.role == "user") {
     return (
       <>
         {console.log(userData)}
@@ -126,7 +126,7 @@ function DashboardPage() {
         <div className="flex items-center justify-center h-screen bg-gray-100">
           <div className="text-center">
             <h1 className="text-3xl font-bold text-black-600">
-              {/* Only admins can view this page */}
+              {/* Users can't view this page */}
             </h1>
           </div>
         </div>
@@ -200,7 +200,7 @@ function DashboardPage() {
       </div>
 
       <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg">
-        <h2 className="text-2xl font-bold mb-4 text-gray-800">Manage Admins</h2>
+        <h2 className="text-2xl font-bold mb-4 text-gray-800">Manage Roles</h2>
         <div className="mb-4">
           <label
             htmlFor="user-select"
@@ -224,9 +224,9 @@ function DashboardPage() {
         </div>
         <button
           className="w-full bg-blue-500 text-white py-2 px-4 rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          onClick={handleUpdateAdmin}
+          onClick={handleUpdateRole}
         >
-          Make Admin
+          Make Role
         </button>
       </div>
     </>

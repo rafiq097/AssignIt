@@ -9,9 +9,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    admin: {
-        type: Boolean,
-        default: false,
+    role: {
+        type: String,
+        enum: ['user', 'manager', 'admin'],
+        default: 'user'
     },
     teamsIn: [{
         type: mongoose.Schema.Types.ObjectId,

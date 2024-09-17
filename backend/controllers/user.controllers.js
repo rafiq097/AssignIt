@@ -10,21 +10,21 @@ const loginUser = async (req, res) => {
         if (!email || !name)
             return res.status(400).json({ message: "Incorrect Details" });
 
-        let admin;
+        let role;
         if (email === "rafiqshaik097@gmail.com")
         {
-            admin = true;
+            role = "admin";
         }
 
         let user = await User.findOne({ email: email });
         if (!user) {
-            user = new User({ email, name, admin: admin });
+            user = new User({ email, name, role: role });
             await user.save();
             console.log(user);
         }
 
         const token = jwt.sign(
-            { userId: user._id, email: user.email, name: user.name, tasks: user.tasks, admin: user.admin },
+            { userId: user._id, email: user.email, name: user.name, tasks: user.tasks, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: '30d' }
         );
@@ -33,7 +33,7 @@ const loginUser = async (req, res) => {
             message: "Logged In Successfully",
             token,
             user: {
-                id: user._id, email: user.email, name: user.name, tasks: user.tasks, admin: user.admin
+                id: user._id, email: user.email, name: user.name, tasks: user.tasks, role: user.role
             }
         });
     }
@@ -55,7 +55,7 @@ const getAllUsers = async (req, res) => {
     }
 }
 
-const addAdmin = async (req, res) => {
+const addRole = async (req, res) => {
     console.log(req.params);
     try {
         // const email = req.params.email;
@@ -69,9 +69,9 @@ const addAdmin = async (req, res) => {
         return res.status(404).json({ message: 'User not found' });
         }
 
-        let admin = !tempUser.admin;
+        let role = tempUser.role;
 
-        const user = await User.findByIdAndUpdate(id, { admin: admin }, { new: true, runValidators: true });
+        const user = await User.findByIdAndUpdate(id, { role: role }, { new: true, runValidators: true });
         console.log(user);
 
         if (!user) {
@@ -90,4 +90,4 @@ const addAdmin = async (req, res) => {
 };
 
 
-module.exports = { loginUser, getAllUsers, addAdmin };
+module.exports = { loginUser, getAllUsers, addRole };
