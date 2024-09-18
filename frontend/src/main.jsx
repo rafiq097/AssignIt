@@ -12,7 +12,7 @@ import DashboardPage from "./pages/DashboardPage.jsx";
 
 axios.interceptors.request.use(
   function (config) {
-    config.baseURL = "https://assignit.onrender.com";
+    config.baseURL = "http://localhost:5000";
     return config;
   },
   function (error) {

@@ -11,7 +11,6 @@ import NavBar from "./components/NavBar.jsx";
 import Spinner from "./components/Spinner.jsx";
 
 function App() {
-  const [loginData, setLoginData] = useState({});
   const [userData, setUserData] = useRecoilState(userAtom);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -42,13 +41,12 @@ function App() {
   const handleLogin = async (x) => {
     try {
       console.log("login called");
-      await setLoginData(x);
 
       const res = await axios.post(
         "/users/login",
         {
-          email: loginData.email,
-          name: loginData.given_name,
+          email: x.email,
+          name: x.given_name,
         }
       );
 
@@ -61,7 +59,7 @@ function App() {
     } catch (err) {
       console.log(err.message);
       console.log(err);
-      toast.error("Please try again...");
+      toast.error("Please try again...", err.message);
     }
   };
 
