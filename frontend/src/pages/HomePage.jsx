@@ -11,7 +11,7 @@ function HomePage() {
   const [tasks, setTasks] = useState([]);
   const [user] = useRecoilState(userAtom);
   const [loading, setLoading] = useState(false);
-
+  
   useEffect(() => {
     const fetchTasksData = async () => {
       try {
@@ -61,7 +61,6 @@ function HomePage() {
 
   return (
     <>
-      <NavBar />
       <div className="container mx-auto p-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Assigned Tasks */}

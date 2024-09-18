@@ -110,7 +110,7 @@ function DashboardPage() {
       toast.error("Failed to update user");
     }
   };
-  
+
   if (loading)
     return (
       <div className="flex items-center justify-center h-screen">
@@ -122,7 +122,6 @@ function DashboardPage() {
     return (
       <>
         {console.log(userData)}
-        <NavBar />
         <div className="flex items-center justify-center h-screen bg-gray-100">
           <div className="text-center">
             <h1 className="text-3xl font-bold text-black-600">
@@ -136,8 +135,6 @@ function DashboardPage() {
 
   return (
     <>
-      <NavBar />
-
       <AddTodo />
 
       {console.log(userData)}
