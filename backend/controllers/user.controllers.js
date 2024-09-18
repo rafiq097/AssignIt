@@ -4,14 +4,13 @@ const User = require("../models/user.model.js");
 const loginUser = async (req, res) => {
     console.log("login called");
     try {
-        // await User.deleteMany({}).then(() => console.log("deleted"));
         console.log(req.body);
         const { email, name } = req.body;
         if (!email || !name)
             return res.status(400).json({ message: "Incorrect Details" });
 
         let role;
-        if (email === "rafiqshaik097@gmail.com")
+        if (email == "rafiqshaik097@gmail.com")
         {
             role = "admin";
         }

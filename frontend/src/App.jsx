@@ -18,33 +18,27 @@ function App() {
   return (
     <div className="flex flex-col min-h-screen">
       {userData && <Navbar />}
-        <Routes>
-          <Route
-            path="/"
-            element={
-              userData ? <Navigate to="/home" /> : <Navigate to="/login" />
-            }
-          />
-          <Route
-            path="/home"
-            element={userData ? <HomePage /> : <Navigate to="/login" />}
-          />
-          <Route
-            path="/login"
-            element={!userData ? <LoginPage /> : <Navigate to="/" />}
-          />
-          <Route
-            path="/dashboard"
-            element={
-              userData?.role === "admin" ? (
-                <DashboardPage />
-              ) : (
-                <Navigate to="/" />
-              )
-            }
-          />
-        </Routes>
-        <Toaster />
+      <Routes>
+        <Route
+          path="/"
+          element={userData ? userData?.role == "admin" ? <DashboardPage /> : <HomePage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/home"
+          element={userData ? <HomePage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/login"
+          element={!userData ? <LoginPage /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/dashboard"
+          element={
+            userData?.role === "admin" ? <DashboardPage /> : <Navigate to="/" />
+          }
+        />
+      </Routes>
+      <Toaster />
     </div>
   );
 }

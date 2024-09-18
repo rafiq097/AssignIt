@@ -15,6 +15,7 @@ function DashboardPage() {
   const [users, setUsers] = useState([]);
   const [userData, setUserData] = useState({});
   const [selectedUser, setSelectedUser] = useState("");
+  const [selectedRole, setSelectedRole] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -96,14 +97,16 @@ function DashboardPage() {
   };
 
   const handleUpdateRole = async () => {
-    console.log(selectedUser);
-    if (!selectedUser) {
-      toast.error("Please select a user");
+    console.log(selectedUser, selectedRole);
+    if(!selectedUser || !selectedRole) {
+      toast.error("Please select a user and a role");
       return;
     }
 
     try {
-      await axios.put(`/users/updateRole/${selectedUser}`);
+      await axios.put(`/users/updateRole/${selectedUser}`, {
+        role: selectedRole,
+      });
       toast.success("User Role updated");
     } catch (error) {
       console.error("Failed to update user:", error);
@@ -196,9 +199,11 @@ function DashboardPage() {
         </div>
       </div>
 
-      <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg">
-        <h2 className="text-2xl font-bold mb-4 text-gray-800">Manage Roles</h2>
-        <div className="mb-4">
+      <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
+      <h2 className="text-2xl font-bold mb-4 text-gray-800">Manage Roles</h2>
+      <div className="flex flex-col md:flex-row gap-6">
+        {/* Users */}
+        <div className="flex-1">
           <label
             htmlFor="user-select"
             className="block text-gray-700 font-medium mb-2"
@@ -219,13 +224,36 @@ function DashboardPage() {
             ))}
           </select>
         </div>
-        <button
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          onClick={handleUpdateRole}
-        >
-          Make Role
-        </button>
+
+        {/* Roles */}
+        <div className="flex-1">
+          <label
+            htmlFor="role-select"
+            className="block text-gray-700 font-medium mb-2"
+          >
+            Select Role:
+          </label>
+          <select
+            id="role-select"
+            value={selectedRole}
+            onChange={(e) => setSelectedRole(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">Select a role</option>
+            <option value="user">User</option>
+            <option value="manager">Manager</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
       </div>
+
+      <button
+        className="w-full bg-blue-500 text-white py-2 px-4 rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 mt-6"
+        onClick={handleUpdateRole}
+      >
+        Update Role
+      </button>
+    </div>
     </>
   );
 }
