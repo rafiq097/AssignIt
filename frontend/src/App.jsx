@@ -21,7 +21,7 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={userData ? userData?.role == "admin" ? <DashboardPage /> : <HomePage /> : <Navigate to="/login" />}
+          element={<Navigate to={userData ? "/home" : "/login"} />}
         />
         <Route
           path="/home"

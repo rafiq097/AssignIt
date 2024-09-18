@@ -6,12 +6,38 @@ import { userAtom } from "../state/userAtom";
 import NavBar from "../components/NavBar";
 import toast from "react-hot-toast";
 import Spinner from "../components/Spinner.jsx";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import EditTask from "../components/EditTask.jsx";
+import AddTodo from "../components/AddTodo.jsx";
 
 function HomePage() {
   const [tasks, setTasks] = useState([]);
   const [user] = useRecoilState(userAtom);
   const [loading, setLoading] = useState(false);
-  
+  const [showEdit, setShowEdit] = useState(false);
+
+  const handleOpenModal = () => {
+    setShowEdit(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowEdit(false);
+    window.location.href = '/home';
+  };
+
+  const handleDeleteTask = async (id) => {
+    console.log(id);
+    try {
+      const response = await axios.delete(`/tasks/delete/${id}`);
+      console.log(response.data);
+      toast.success("Task deleted successfully!");
+      window.location.href = '/home';
+    } catch (error) {
+      console.error("Failed to delete task:", error);
+      toast.error("Failed to delete task.");
+    }
+  };
+
   useEffect(() => {
     const fetchTasksData = async () => {
       try {
@@ -61,6 +87,8 @@ function HomePage() {
 
   return (
     <>
+      {console.log(user)}
+      <AddTodo assignedToEmail={user.email}/>
       <div className="container mx-auto p-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Assigned Tasks */}
@@ -73,8 +101,23 @@ function HomePage() {
               .map((task) => (
                 <div
                   key={task._id}
-                  className="mb-4 p-4 border border-gray-200 rounded"
+                  className="relative mb-4 p-4 border border-gray-200 rounded"
                 >
+                  <div className="absolute top-2 right-2 flex space-x-2">
+                    <button
+                      className="text-blue-500 hover:text-blue-700"
+                      onClick={() => handleOpenModal()}
+                    >
+                      <FaEdit />
+                    </button>
+                    <button
+                      className="text-red-500 hover:text-red-700"
+                      onClick={() => handleDeleteTask(task._id)}
+                    >
+                      <FaTrash />
+                    </button>
+                  </div>
+
                   <h3 className="font-bold">{task.title}</h3>
                   <p className="text-gray-600">{task.description}</p>
                   <div className="mt-2">
@@ -91,6 +134,10 @@ function HomePage() {
                       Mark as Completed
                     </button>
                   </div>
+
+                  {showEdit && (
+                    <EditTask task={task} onClose={handleCloseModal} />
+                  )}
                 </div>
               ))}
           </div>
@@ -105,8 +152,23 @@ function HomePage() {
               .map((task) => (
                 <div
                   key={task._id}
-                  className="mb-4 p-4 border border-gray-200 rounded"
+                  className="relative mb-4 p-4 border border-gray-200 rounded"
                 >
+                  <div className="absolute top-2 right-2 flex space-x-2">
+                    <button
+                      className="text-blue-500 hover:text-blue-700"
+                      onClick={() => handleOpenModal()}
+                    >
+                      <FaEdit />
+                    </button>
+                    <button
+                      className="text-red-500 hover:text-red-700"
+                      onClick={() => handleDeleteTask(task._id)}
+                    >
+                      <FaTrash />
+                    </button>
+                  </div>
+
                   <h3 className="font-bold">{task.title}</h3>
                   <p className="text-gray-600">{task.description}</p>
                   <div className="mt-2">
@@ -137,11 +199,26 @@ function HomePage() {
               .map((task) => (
                 <div
                   key={task._id}
-                  className="mb-4 p-4 border border-gray-200 rounded"
+                  className="relative mb-4 p-4 border border-gray-200 rounded"
                 >
+                  <div className="absolute top-2 right-2 flex space-x-2">
+                    <button
+                      className="text-blue-500 hover:text-blue-700"
+                      onClick={() => handleOpenModal()}
+                    >
+                      <FaEdit />
+                    </button>
+                    <button
+                      className="text-red-500 hover:text-red-700"
+                      onClick={() => handleDeleteTask(task._id)}
+                    >
+                      <FaTrash />
+                    </button>
+                  </div>
+
                   <h3 className="font-bold">{task.title}</h3>
                   <p className="text-gray-600">{task.description}</p>
-                  <p className="text-sm text-green-600 mt-2">Task Completed</p>
+                  <p className="text-sm text-green-500 mt-2">Task Completed</p>
                   <div className="mt-2">
                     <button
                       className="bg-red-500 text-white text-sm px-2 py-1 rounded mr-2"

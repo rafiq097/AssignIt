@@ -65,7 +65,7 @@ const updateTask = async (req, res) => {
         //     if(!user)
         //         return res.status(404).json({ message: 'User not found' });
         // }
-        const task = await Task.findOneAndUpdate({_id: id}, req.body, { new: true, runValidators: true });
+        const task = await Task.findOneAndUpdate({ _id: id }, req.body, { new: true, runValidators: true });
         console.log(task);
         if (!task)
             return res.status(404).json({ message: "No Such Task" });
@@ -81,12 +81,14 @@ const updateTask = async (req, res) => {
 
 const deleteTask = async (req, res) => {
     try {
-        const { taskID } = req.params.id;
-        const task = await Task.findOneAndDelete(taskID);
+        const id = req.params.id;
+        console.log(id);
+        const task = await Task.findOneAndDelete({_id: id});
         if (!task)
             return res.status(404).json({ message: "No Such Task" });
 
 
+        console.log(task);
         res.status(200).json({ task: task, success: "Successful" });
     }
     catch (error) {

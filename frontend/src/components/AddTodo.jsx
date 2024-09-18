@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import toast from "react-hot-toast";
 import axios from "axios";
 
-const AddTodo = () => {
+const AddTodo = ({ assignedToEmail }) => {
     const [isFormVisible, setIsFormVisible] = useState(false);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -14,13 +14,13 @@ const AddTodo = () => {
       }
       try
       {
-        const newTask = { title, description };
+        const newTask = { title, description, assignedToEmail };
         await axios.post('/tasks/create', newTask);
         toast.success("Task created successfully!");
         setTitle('');
         setDescription('');
         setIsFormVisible(false);
-        window.location.href='/dashboard';
+        window.location.reload();
       }
       catch (error) {
         console.error("Failed to add task", error);

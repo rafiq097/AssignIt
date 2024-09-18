@@ -138,7 +138,7 @@ function DashboardPage() {
 
   return (
     <>
-      <AddTodo />
+      <AddTodo assignedToEmail={null}/>
 
       {console.log(userData)}
       <div className="container mx-auto p-4">
