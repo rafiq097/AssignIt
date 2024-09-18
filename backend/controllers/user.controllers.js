@@ -10,8 +10,7 @@ const loginUser = async (req, res) => {
             return res.status(400).json({ message: "Incorrect Details" });
 
         let role;
-        if (email == "rafiqshaik097@gmail.com")
-        {
+        if (email == "rafiqshaik097@gmail.com") {
             role = "admin";
         }
 
@@ -65,7 +64,7 @@ const addRole = async (req, res) => {
 
         let tempUser = await User.findById(id);
         if (!tempUser) {
-        return res.status(404).json({ message: 'User not found' });
+            return res.status(404).json({ message: 'User not found' });
         }
 
         let role = tempUser.role;
