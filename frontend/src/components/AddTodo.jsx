@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import toast from "react-hot-toast";
 import axios from "axios";
 
-const AddTodo = ({ assignedToEmail }) => {
+const AddTodo = ({ assignedToEmail, fetchTasksData }) => {
     const [isFormVisible, setIsFormVisible] = useState(false);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -20,7 +20,7 @@ const AddTodo = ({ assignedToEmail }) => {
         setTitle('');
         setDescription('');
         setIsFormVisible(false);
-        window.location.reload();
+        fetchTasksData();
       }
       catch (error) {
         console.error("Failed to add task", error);

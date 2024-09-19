@@ -34,7 +34,7 @@ function App() {
         <Route
           path="/dashboard"
           element={
-            userData?.role === "admin" ? <DashboardPage /> : <Navigate to="/" />
+            userData?.role !== "user" ? <DashboardPage /> : <Navigate to="/" />
           }
         />
       </Routes>

@@ -59,6 +59,7 @@ function NavBar() {
 
   return (
     <nav className="bg-blue-500 p-4">
+      {console.log(userData)}
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo */}
         <div className="text-white text-2xl font-bold">

@@ -9,6 +9,8 @@ import AssignedTask from "../components/AssignedTask.jsx";
 import OngoingTask from "../components/OngoingTask.jsx";
 import CompletedTask from "../components/CompletedTask.jsx";
 import Spinner from "../components/Spinner.jsx";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import EditTask from "../components/EditTask.jsx";
 
 function DashboardPage() {
   const [tasks, setTasks] = useState([]);
@@ -17,18 +19,44 @@ function DashboardPage() {
   const [selectedUser, setSelectedUser] = useState("");
   const [selectedRole, setSelectedRole] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+  const [user, setUser] = useRecoilState(userAtom);
+
+  const handleOpenModal = () => {
+    setShowEdit(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowEdit(false);
+    fetchTasksData();
+  };
+
+  const handleDeleteTask = async (id) => {
+    console.log(id);
+    try {
+      const response = await axios.delete(`/tasks/delete/${id}`);
+      console.log(response.data);
+      toast.success("Task deleted successfully!");
+      fetchTasksData();
+    } catch (error) {
+      console.error("Failed to delete task:", error);
+      toast.error("Failed to delete task.");
+    }
+  };
+
+  const fetchTasksData = async () => {
+    try {
+      const res = await axios.get("/tasks/gettasks");
+      setTasks(res.data.tasks);
+      console.log(res.data);
+      console.log(tasks);
+    } catch (error) {
+      console.error("Failed to fetch tasks", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchTasksData = async () => {
-      try {
-        const res = await axios.get("/tasks/gettasks");
-        setTasks(res.data.tasks);
-      } catch (error) {
-        console.error("Failed to fetch tasks", error);
-      }
-    };
-
-    const fetchUsersData = async () => {
+    const fetchUsers = async () => {
       try {
         const res = await axios.get("/users/getusers");
         setUsers(res.data.users);
@@ -37,7 +65,7 @@ function DashboardPage() {
       }
     };
 
-    const updateRoleStatus = async () => {
+    const updateUserStatus = async () => {
       try {
         const token = localStorage.getItem("token");
 
@@ -46,12 +74,13 @@ function DashboardPage() {
         });
 
         setUserData(res.data.user);
+        setUser(userData);
       } catch {}
     };
 
     fetchTasksData();
-    fetchUsersData();
-    updateRoleStatus();
+    fetchUsers();
+    updateUserStatus();
   }, []);
 
   const updateTaskStatus = async (taskId, status) => {
@@ -98,15 +127,18 @@ function DashboardPage() {
 
   const handleUpdateRole = async () => {
     console.log(selectedUser, selectedRole);
-    if(!selectedUser || !selectedRole) {
+    if (!selectedUser || !selectedRole) {
       toast.error("Please select a user and a role");
       return;
     }
 
     try {
-      await axios.put(`/users/updateRole/${selectedUser}`, {
+      console.log(selectedUser, selectedRole);
+      const res = await axios.put(`/users/updateRole/${selectedUser}`, {
         role: selectedRole,
       });
+
+      console.log(res.data);
       toast.success("User Role updated");
     } catch (error) {
       console.error("Failed to update user:", error);
@@ -138,8 +170,7 @@ function DashboardPage() {
 
   return (
     <>
-      <AddTodo assignedToEmail={null}/>
-
+      <AddTodo assignedToEmail={null} fetchTasksData={fetchTasksData}/>
       {console.log(userData)}
       <div className="container mx-auto p-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -156,7 +187,12 @@ function DashboardPage() {
                   task={task}
                   updateTaskStatus={updateTaskStatus}
                   updateTaskAssignedTo={updateTaskAssignedTo}
-                  users={users} // Pass the list of users
+                  users={users}
+                  handleOpenModal={handleOpenModal}
+                  handleCloseModal={handleCloseModal}
+                  handleDeleteTask={handleDeleteTask}
+                  showEdit={showEdit}
+                  setShowEdit={setShowEdit}
                 />
               ))}
           </div>
@@ -174,7 +210,12 @@ function DashboardPage() {
                   task={task}
                   updateTaskStatus={updateTaskStatus}
                   updateTaskAssignedTo={updateTaskAssignedTo}
-                  users={users} // Pass the list of users
+                  users={users}
+                  handleOpenModal={handleOpenModal}
+                  handleCloseModal={handleCloseModal}
+                  handleDeleteTask={handleDeleteTask}
+                  showEdit={showEdit}
+                  setShowEdit={setShowEdit}
                 />
               ))}
           </div>
@@ -192,68 +233,77 @@ function DashboardPage() {
                   task={task}
                   updateTaskStatus={updateTaskStatus}
                   updateTaskAssignedTo={updateTaskAssignedTo}
-                  users={users} // Pass the list of users
+                  users={users}
+                  handleOpenModal={handleOpenModal}
+                  handleCloseModal={handleCloseModal}
+                  handleDeleteTask={handleDeleteTask}
+                  showEdit={showEdit}
+                  setShowEdit={setShowEdit}
                 />
               ))}
           </div>
         </div>
       </div>
+      
+      {userData?.role == "admin" && (
+        <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
+          <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center">
+            Manage Roles
+          </h2>
+          <div className="flex flex-col md:flex-row gap-6">
+            {/* Users */}
+            <div className="flex-1">
+              <label
+                htmlFor="user-select"
+                className="block text-gray-700 font-medium mb-2"
+              >
+                Select User:
+              </label>
+              <select
+                id="user-select"
+                value={selectedUser}
+                onChange={(e) => setSelectedUser(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select a user</option>
+                {users.map((user) => (
+                  <option key={user._id} value={user._id}>
+                    {user.email}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-      <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
-      <h2 className="text-2xl font-bold mb-4 text-gray-800">Manage Roles</h2>
-      <div className="flex flex-col md:flex-row gap-6">
-        {/* Users */}
-        <div className="flex-1">
-          <label
-            htmlFor="user-select"
-            className="block text-gray-700 font-medium mb-2"
+            {/* Roles */}
+            <div className="flex-1">
+              <label
+                htmlFor="role-select"
+                className="block text-gray-700 font-medium mb-2"
+              >
+                Select Role:
+              </label>
+              <select
+                id="role-select"
+                value={selectedRole}
+                onChange={(e) => setSelectedRole(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select a role</option>
+                <option value="user">User</option>
+                <option value="manager">Manager</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+          </div>
+
+          <button
+            className="w-full bg-blue-500 text-white py-2 px-4 rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 mt-6"
+            onClick={handleUpdateRole}
           >
-            Select User:
-          </label>
-          <select
-            id="user-select"
-            value={selectedUser}
-            onChange={(e) => setSelectedUser(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">Select a user</option>
-            {users.map((user) => (
-              <option key={user._id} value={user._id}>
-                {user.email}
-              </option>
-            ))}
-          </select>
+            Update Role
+          </button>
         </div>
-
-        {/* Roles */}
-        <div className="flex-1">
-          <label
-            htmlFor="role-select"
-            className="block text-gray-700 font-medium mb-2"
-          >
-            Select Role:
-          </label>
-          <select
-            id="role-select"
-            value={selectedRole}
-            onChange={(e) => setSelectedRole(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">Select a role</option>
-            <option value="user">User</option>
-            <option value="manager">Manager</option>
-            <option value="admin">Admin</option>
-          </select>
-        </div>
-      </div>
-
-      <button
-        className="w-full bg-blue-500 text-white py-2 px-4 rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 mt-6"
-        onClick={handleUpdateRole}
-      >
-        Update Role
-      </button>
-    </div>
+      )}{" "}
     </>
   );
 }

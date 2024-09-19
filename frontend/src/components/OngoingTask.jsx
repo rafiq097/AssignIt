@@ -1,9 +1,24 @@
 import React, { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import EditTask from "../components/EditTask.jsx";
+import { useRecoilState } from "recoil";
+import { userAtom } from "../state/userAtom";
 
-const OngoingTask = ({ task, updateTaskStatus, updateTaskAssignedTo, users }) => {
+const OngoingTask = ({
+  task,
+  updateTaskStatus,
+  updateTaskAssignedTo,
+  users,
+  handleOpenModal,
+  handleCloseModal,
+  handleDeleteTask,
+  showEdit,
+  setShowEdit,
+}) => {
   const [selectedUser, setSelectedUser] = useState(task.assignedToEmail || "");
+  const [user] = useRecoilState(userAtom);
 
   const handleChange = (e) => {
     setSelectedUser(e.target.value);
@@ -27,7 +42,25 @@ const OngoingTask = ({ task, updateTaskStatus, updateTaskAssignedTo, users }) =>
   };
 
   return (
-    <div className="mb-4 p-4 border border-gray-200 rounded">
+    <div className="relative mb-4 p-4 border border-gray-200 rounded">
+      {console.log(user)}
+      {user.role == "admin" && (
+        <div className="absolute top-2 right-2 flex space-x-2">
+          <button
+            className="text-blue-500 hover:text-blue-700"
+            onClick={() => handleOpenModal()}
+          >
+            <FaEdit />
+          </button>
+          <button
+            className="text-red-500 hover:text-red-700"
+            onClick={() => handleDeleteTask(task._id)}
+          >
+            <FaTrash />
+          </button>
+        </div>
+      )}
+
       <h3 className="font-bold">{task.title}</h3>
       <p className="text-gray-600">{task.description}</p>
       <p className="text-sm text-gray-500">
@@ -75,6 +108,8 @@ const OngoingTask = ({ task, updateTaskStatus, updateTaskAssignedTo, users }) =>
           Notify
         </button>
       </div>
+
+      {showEdit && <EditTask task={task} onClose={handleCloseModal} />}
     </div>
   );
 };

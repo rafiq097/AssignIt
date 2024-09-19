@@ -22,7 +22,7 @@ function HomePage() {
 
   const handleCloseModal = () => {
     setShowEdit(false);
-    window.location.href = '/home';
+    fetchTasksData();
   };
 
   const handleDeleteTask = async (id) => {
@@ -31,30 +31,30 @@ function HomePage() {
       const response = await axios.delete(`/tasks/delete/${id}`);
       console.log(response.data);
       toast.success("Task deleted successfully!");
-      window.location.href = '/home';
+      fetchTasksData();
     } catch (error) {
       console.error("Failed to delete task:", error);
       toast.error("Failed to delete task.");
     }
   };
 
+  const fetchTasksData = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("token");
+
+      const res = await axios.get(`/tasks/get`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setTasks(res.data.tasks);
+    } catch (error) {
+      console.error("Failed to fetch user teams and tasks", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchTasksData = async () => {
-      try {
-        setLoading(true);
-        const token = localStorage.getItem("token");
-
-        const res = await axios.get(`/tasks/get`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setTasks(res.data.tasks);
-      } catch (error) {
-        console.error("Failed to fetch user teams and tasks", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchTasksData();
   }, []);
 
@@ -88,7 +88,7 @@ function HomePage() {
   return (
     <>
       {console.log(user)}
-      <AddTodo assignedToEmail={user.email}/>
+      <AddTodo assignedToEmail={user.email} fetchTasksData={fetchTasksData}/>
       <div className="container mx-auto p-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Assigned Tasks */}
@@ -185,6 +185,10 @@ function HomePage() {
                       Mark as Completed
                     </button>
                   </div>
+
+                  {showEdit && (
+                    <EditTask task={task} onClose={handleCloseModal} />
+                  )}
                 </div>
               ))}
           </div>
@@ -233,6 +237,10 @@ function HomePage() {
                       Mark as Ongoing
                     </button>
                   </div>
+
+                  {showEdit && (
+                    <EditTask task={task} onClose={handleCloseModal} />
+                  )}
                 </div>
               ))}
           </div>

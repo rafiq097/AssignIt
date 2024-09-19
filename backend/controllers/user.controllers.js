@@ -58,6 +58,7 @@ const addRole = async (req, res) => {
     try {
         // const email = req.params.email;
         const id = req.params.id;
+        const role = req.body.role;
         if (!id) {
             return res.status(400).json({ message: 'User ID is required' });
         }
@@ -66,8 +67,6 @@ const addRole = async (req, res) => {
         if (!tempUser) {
             return res.status(404).json({ message: 'User not found' });
         }
-
-        let role = tempUser.role;
 
         const user = await User.findByIdAndUpdate(id, { role: role }, { new: true, runValidators: true });
         console.log(user);
