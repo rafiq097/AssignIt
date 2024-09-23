@@ -15,12 +15,12 @@ import EditTask from "../components/EditTask.jsx";
 function DashboardPage() {
   const [tasks, setTasks] = useState([]);
   const [users, setUsers] = useState([]);
-  const [userData, setUserData] = useState({});
+  const [user, setUser] = useState({});
   const [selectedUser, setSelectedUser] = useState("");
   const [selectedRole, setSelectedRole] = useState("");
   const [loading, setLoading] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
-  const [user, setUser] = useRecoilState(userAtom);
+  const [userData, setUserData] = useRecoilState(userAtom);
 
   const handleOpenModal = () => {
     setShowEdit(true);
@@ -73,8 +73,8 @@ function DashboardPage() {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        setUserData(res.data.user);
-        setUser(userData);
+        setUser(res.data.user);
+        setUser(user);
       } catch {}
     };
 
@@ -153,10 +153,10 @@ function DashboardPage() {
       </div>
     );
 
-  if (userData?.role == "user") {
+  if (user?.role == "user") {
     return (
       <>
-        {console.log(userData)}
+        {console.log(user)}
         <div className="flex items-center justify-center h-screen bg-gray-100">
           <div className="text-center">
             <h1 className="text-3xl font-bold text-black-600">
@@ -171,7 +171,7 @@ function DashboardPage() {
   return (
     <>
       <AddTodo fetchTasksData={fetchTasksData}/>
-      {console.log(userData)}
+      {console.log(user)}
       <div className="container mx-auto p-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Assigned Tasks */}
@@ -245,7 +245,7 @@ function DashboardPage() {
         </div>
       </div>
       
-      {userData?.role == "admin" && (
+      {user?.role == "admin" && (
         <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
           <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center">
             Manage Roles

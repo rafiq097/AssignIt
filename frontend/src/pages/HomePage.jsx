@@ -7,12 +7,14 @@ import Spinner from "../components/Spinner.jsx";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import EditTask from "../components/EditTask.jsx";
 import AddTodo from "../components/AddTodo.jsx";
+import { useNavigate } from "react-router-dom";
 
 function HomePage() {
   const [tasks, setTasks] = useState([]);
   const [userData, setUserData] = useRecoilState(userAtom);
   const [loading, setLoading] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
+  const navigate = useNavigate();
 
   const handleOpenModal = () => {
     setShowEdit(true);
@@ -157,8 +159,10 @@ function HomePage() {
                   <div className="flex justify-between text-sm mt-2">
                     <span
                       className={`font-medium ${
-                        task.priority === "high"
+                        task.priority === "urgent"
                           ? "text-red-600"
+                          : task.priority === "high"
+                          ? "text-orange-600"
                           : task.priority === "medium"
                           ? "text-yellow-600"
                           : "text-green-600"
@@ -230,6 +234,33 @@ function HomePage() {
                     </button>
                   </div>
 
+                  <div className="flex justify-between text-sm mt-2">
+                    <span
+                      className={`font-medium ${
+                        task.priority === "urgent"
+                          ? "text-red-600"
+                          : task.priority === "high"
+                          ? "text-orange-600"
+                          : task.priority === "medium"
+                          ? "text-yellow-600"
+                          : "text-green-600"
+                      }`}
+                    >
+                      Priority: {task.priority}
+                    </span>
+                    {task.dueDate && (
+                      <span
+                        className={`font-medium ${
+                          new Date(task.dueDate) < new Date()
+                            ? "text-red-600"
+                            : "text-gray-500"
+                        }`}
+                      >
+                        Due: {new Date(task.dueDate).toLocaleDateString()}
+                      </span>
+                    )}
+                  </div>
+
                   {showEdit && (
                     <EditTask task={task} onClose={handleCloseModal} />
                   )}
@@ -280,6 +311,33 @@ function HomePage() {
                     >
                       Mark as Ongoing
                     </button>
+                  </div>
+
+                  <div className="flex justify-between text-sm mt-2">
+                    <span
+                      className={`font-medium ${
+                        task.priority === "urgent"
+                          ? "text-red-600"
+                          : task.priority === "high"
+                          ? "text-orange-600"
+                          : task.priority === "medium"
+                          ? "text-yellow-600"
+                          : "text-green-600"
+                      }`}
+                    >
+                      Priority: {task.priority}
+                    </span>
+                    {task.dueDate && (
+                      <span
+                        className={`font-medium ${
+                          new Date(task.dueDate) < new Date()
+                            ? "text-red-600"
+                            : "text-gray-500"
+                        }`}
+                      >
+                        Due: {new Date(task.dueDate).toLocaleDateString()}
+                      </span>
+                    )}
                   </div>
 
                   {showEdit && (

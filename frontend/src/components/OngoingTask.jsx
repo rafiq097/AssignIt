@@ -81,6 +81,33 @@ const OngoingTask = ({
         </button>
       </div>
 
+      <div className="flex justify-between text-sm mt-2">
+        <span
+          className={`font-medium ${
+            task.priority === "urgent"
+              ? "text-red-600"
+              : task.priority === "high"
+              ? "text-orange-600"
+              : task.priority === "medium"
+              ? "text-yellow-600"
+              : "text-green-600"
+          }`}
+        >
+          Priority: {task.priority}
+        </span>
+        {task.dueDate && (
+          <span
+            className={`font-medium ${
+              new Date(task.dueDate) < new Date()
+                ? "text-red-600"
+                : "text-gray-500"
+            }`}
+          >
+            Due: {new Date(task.dueDate).toLocaleDateString()}
+          </span>
+        )}
+      </div>
+
       {/* Assign to user */}
       <div className="mt-4">
         <select
