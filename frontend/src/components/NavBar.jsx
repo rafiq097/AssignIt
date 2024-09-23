@@ -10,7 +10,8 @@ import Spinner from "../components/Spinner.jsx";
 function NavBar() {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const [userData, setUserData] = useState({});
+  const [user, setUser] = useState({});
+  const [userData, setUserData] = useRecoilState(userAtom);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -23,7 +24,7 @@ function NavBar() {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        setUserData(res.data.user);
+        setUser(res.data.user);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -38,11 +39,10 @@ function NavBar() {
   const handleLogout = async () => {
     try {
       localStorage.removeItem("token");
+      setUser(null);
       setUserData(null);
-
       toast.success("Logout successful");
-      navigate("/");
-      window.location.href = '/';
+      navigate("/login");
     } catch (error) {
       toast.error("Error while logging out");
       console.error("Logout failed", error);
@@ -59,7 +59,7 @@ function NavBar() {
 
   return (
     <nav className="bg-blue-500 p-4">
-      {console.log(userData)}
+      {console.log(user)}
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo */}
         <div className="text-white text-2xl font-bold">
@@ -92,13 +92,13 @@ function NavBar() {
           {isOpen && (
             <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-md shadow-lg">
               <Link
-                to="/home"
+                to="/"
                 className="block px-4 py-2 text-blue-500 hover:bg-gray-100"
                 onClick={() => setIsOpen(false)}
               >
                 Home
               </Link>
-              {userData.role != "user" && 
+              {user.role != "user" && 
                 <Link
                   to="/dashboard"
                   className="block px-4 py-2 text-blue-500 hover:bg-gray-100"
@@ -120,10 +120,10 @@ function NavBar() {
 
         {/* Links for Desktop */}
         <div className="hidden md:flex items-center space-x-6">
-          <Link to="/home" className="text-white hover:text-gray-200">
+          <Link to="/" className="text-white hover:text-gray-200">
             Home
           </Link>
-          {userData.role != "user" && (
+          {user?.role != "user" && (
             <Link to="/dashboard" className="text-white hover:text-gray-200">
               Dashboard
             </Link>

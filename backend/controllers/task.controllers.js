@@ -26,6 +26,7 @@ const createTask = async (req, res) => {
         const { assignedToEmail } = req.body;
 
         if (assignedToEmail) {
+            console.log(assignedToEmail);
             const user = await User.findOne({ email: assignedToEmail });
             if (!user)
                 return res.status(404).json({ message: "No such user found" });
@@ -37,12 +38,15 @@ const createTask = async (req, res) => {
             user.tasks.push(task);
             await user.save();
 
+            console.log(task);
+            console.log(user);
             res.status(201).json({ task });
         }
         else {
             const task = await Task.create(req.body);
             await task.save();
 
+            console.log(task);
             res.status(201).json({ task });
         }
     }

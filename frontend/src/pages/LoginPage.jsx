@@ -25,7 +25,7 @@ useEffect(() => {
       })
       .then((res) => {
         setUserData(res.data.user);
-        navigate("/home");
+        navigate("/");
       })
       .catch((err) => {
         console.log(err.message);
@@ -55,7 +55,7 @@ const handleLogin = async (x) => {
     await setUserData(res.data.user);
 
     toast.success("Login Success");
-    navigate("/home");
+    navigate("/");
   } catch (err) {
     console.log(err.message);
     console.log(err);

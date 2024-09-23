@@ -21,11 +21,8 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={<Navigate to={userData ? "/home" : "/login"} />}
-        />
-        <Route
-          path="/home"
-          element={userData ? <HomePage /> : <Navigate to="/login" />}
+          // element={userData ? <HomePage /> : <Navigate to="/login" />}
+          element={<HomePage />}
         />
         <Route
           path="/login"

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import axios from "axios";
+// import { tasksAtom } from "../state/tasksAtom.js";
 import { userAtom } from "../state/userAtom";
+import NavBar from "../components/NavBar";
 import toast from "react-hot-toast";
 import Spinner from "../components/Spinner.jsx";
 import { FaEdit, FaTrash } from "react-icons/fa";
@@ -10,7 +12,7 @@ import AddTodo from "../components/AddTodo.jsx";
 
 function HomePage() {
   const [tasks, setTasks] = useState([]);
-  const [userData, setUserData] = useRecoilState(userAtom);
+  const [user] = useRecoilState(userAtom);
   const [loading, setLoading] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
 
@@ -46,36 +48,14 @@ function HomePage() {
       });
       setTasks(res.data.tasks);
     } catch (error) {
-      console.error("Failed to fetch user tasks", error);
+      console.error("Failed to fetch user teams and tasks", error);
     } finally {
       setLoading(false);
     }
   };
 
-  const verify = async () => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      axios
-        .get("/verify", {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => {
-          setUserData(res.data.user);
-        })
-        .catch((err) => {
-          console.log(err.message);
-          localStorage.removeItem("token");
-          setUserData(null);
-        });
-    } else {
-      toast.error("Please login to continue");
-      navigate("/login");
-    }
-  };
-
   useEffect(() => {
     fetchTasksData();
-    verify();
   }, []);
 
   const updateTaskStatus = async (taskId, status) => {
@@ -107,7 +87,8 @@ function HomePage() {
 
   return (
     <>
-      {console.log(userData)}
+      {console.log(user)}
+      <AddTodo assignedToEmail={user.email} fetchTasksData={fetchTasksData}/>
       <div className="container mx-auto p-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Assigned Tasks */}
@@ -152,31 +133,6 @@ function HomePage() {
                     >
                       Mark as Completed
                     </button>
-                  </div>
-
-                  <div className="flex justify-between text-sm mt-2">
-                    <span
-                      className={`font-medium ${
-                        task.priority === "high"
-                          ? "text-red-600"
-                          : task.priority === "medium"
-                          ? "text-yellow-600"
-                          : "text-green-600"
-                      }`}
-                    >
-                      Priority: {task.priority}
-                    </span>
-                    {task.dueDate && (
-                      <span
-                        className={`font-medium ${
-                          new Date(task.dueDate) < new Date()
-                            ? "text-red-600"
-                            : "text-gray-500"
-                        }`}
-                      >
-                        Due: {new Date(task.dueDate).toLocaleDateString()}
-                      </span>
-                    )}
                   </div>
 
                   {showEdit && (
@@ -290,7 +246,6 @@ function HomePage() {
           </div>
         </div>
       </div>
-      <AddTodo fetchTasksData={fetchTasksData} />
     </>
   );
 }
