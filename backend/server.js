@@ -15,7 +15,7 @@ app.use(express.static(path.join(__dirname, '..', 'frontend', 'dist')));
 
 // app.use(cors());
 app.use(cors({
-    origin: '*',
+    origin: ['https://assignit.onrender.com', 'http://localhost:5173'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
 }));
