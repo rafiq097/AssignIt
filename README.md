@@ -1,4 +1,4 @@
-# Taskify Frontend
+# AssignIt Frontend
 
 
 
@@ -11,9 +11,9 @@ Follow these steps to get the frontend server up and running:
 First, clone the repository from GitHub to your local machine:
 
 ```bash
-git clone https://github.com/rafiq097/taskify.git
+git clone https://github.com/rafiq097/AssignIt.git
 
-cd taskify/frontend
+cd AssignIt/frontend
 
 npm install
 
