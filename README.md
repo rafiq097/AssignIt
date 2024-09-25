@@ -1,7 +1,6 @@
 # AssignIt Frontend
 
 
-
 ## Getting Started
 
 Follow these steps to get the frontend server up and running:
