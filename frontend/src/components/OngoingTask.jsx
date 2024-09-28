@@ -44,7 +44,7 @@ const OngoingTask = ({
   return (
     <div className="relative mb-4 p-4 border border-gray-200 rounded">
       {console.log(user)}
-      {user.role == "admin" && (
+      {user?.role == "admin" && (
         <div className="absolute top-2 right-2 flex space-x-2">
           <button
             className="text-blue-500 hover:text-blue-700"

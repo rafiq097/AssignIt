@@ -14,6 +14,9 @@ function HomePage() {
   const [userData, setUserData] = useRecoilState(userAtom);
   const [loading, setLoading] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
+  const [search, setSearch] = useState("");
+  const [filteredTasks, setFilteredTasks] = useState([]);
+  const [sortOption, setSortOption] = useState("none");
   const navigate = useNavigate();
 
   const handleOpenModal = () => {
@@ -100,6 +103,40 @@ function HomePage() {
     }
   };
 
+  useEffect(() => {
+    let results = [...tasks];
+
+    if (search) {
+      results = results.filter(
+        (task) =>
+          task.title.toLowerCase().includes(search.toLowerCase()) ||
+          task.description.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+
+    const priorityValues = {
+      low: 1,
+      medium: 2,
+      high: 3,
+      // urgent: 4,
+    };
+
+    if (sortOption === "priorityAsc")
+      results.sort(
+        (a, b) => priorityValues[a.priority] - priorityValues[b.priority]
+      );
+    else if (sortOption === "priorityDesc")
+      results.sort(
+        (a, b) => priorityValues[b.priority] - priorityValues[a.priority]
+      );
+    else if (sortOption === "dateAsc")
+      results.sort((a, b) => new Date(b.dueDate) - new Date(a.dueDate));
+    else if (sortOption === "dateDesc")
+      results.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+
+    setFilteredTasks(results);
+  }, [search, sortOption, tasks]);
+
   if (loading)
     return (
       <div className="flex items-center justify-center h-screen">
@@ -111,13 +148,42 @@ function HomePage() {
     <>
       {console.log(userData)}
       <div className="container mx-auto p-4">
+        <div className="mb-4 flex justify-center items-center">
+          <div className="relative w-full md:w-1/3">
+            <input
+              type="text"
+              placeholder="Search tasks..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="border rounded-lg p-2 pl-10 w-full shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <span className="absolute left-2 top-2 text-gray-500">🔍</span>
+          </div>
+
+          <div className="relative ml-2">
+            <select
+              onChange={(e) => setSortOption(e.target.value)}
+              className="border rounded-lg p-2 bg-white shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-33"
+              value={sortOption}
+            >
+              <option value="none">Sort by</option>
+              <option value="priorityAsc">Priority: Low to High</option>
+              <option value="priorityDesc">Priority: High to Low</option>
+              <option value="dateDesc">Date: Newest to Oldest</option>
+              <option value="dateAsc">Date: Oldest to Newest</option>
+              {/* <option value="statusAsc">Status: Low to High</option>
+              <option value="statusDesc">Status: High to Low</option> */}
+            </select>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Assigned Tasks */}
           <div className="bg-white shadow-md rounded p-6">
             <h2 className="text-xl font-semibold mb-4 text-red-600">
               Assigned Tasks
             </h2>
-            {tasks
+            {filteredTasks
               .filter((task) => task.status === "assigned")
               .map((task) => (
                 <div
@@ -195,7 +261,7 @@ function HomePage() {
             <h2 className="text-xl font-semibold mb-4 text-yellow-600">
               Ongoing Tasks
             </h2>
-            {tasks
+            {filteredTasks
               .filter((task) => task.status === "ongoing")
               .map((task) => (
                 <div
@@ -273,7 +339,7 @@ function HomePage() {
             <h2 className="text-xl font-semibold mb-4 text-green-600">
               Completed Tasks
             </h2>
-            {tasks
+            {filteredTasks
               .filter((task) => task.status === "completed")
               .map((task) => (
                 <div
