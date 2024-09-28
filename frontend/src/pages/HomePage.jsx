@@ -118,7 +118,7 @@ function HomePage() {
       low: 1,
       medium: 2,
       high: 3,
-      // urgent: 4,
+      urgent: 4,
     };
 
     if (sortOption === "priorityAsc")
