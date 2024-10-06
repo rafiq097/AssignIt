@@ -24,5 +24,3 @@ dist-ssr
 
 /src/state/tasksAtom.js
 /src/state/teamsAtom.js
-/src/pages/TaskPage.jsx
-/src/pages/TeamPage.jsx
