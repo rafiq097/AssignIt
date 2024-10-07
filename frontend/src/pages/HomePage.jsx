@@ -13,18 +13,14 @@ function HomePage() {
   const [tasks, setTasks] = useState([]);
   const [userData, setUserData] = useRecoilState(userAtom);
   const [loading, setLoading] = useState(false);
-  const [showEdit, setShowEdit] = useState(false);
   const [search, setSearch] = useState("");
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [sortOption, setSortOption] = useState("none");
   const navigate = useNavigate();
 
-  const handleOpenModal = () => {
-    setShowEdit(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowEdit(false);
+  const handleEditTask = (id) => {
+    console.log(id);
+    navigate(`/task/${id}`);
     fetchTasksData();
   };
 
@@ -193,7 +189,7 @@ function HomePage() {
                   <div className="absolute top-2 right-2 flex space-x-2">
                     <button
                       className="text-blue-500 hover:text-blue-700"
-                      onClick={() => handleOpenModal()}
+                      onClick={() => handleEditTask(task._id)}
                     >
                       <FaEdit />
                     </button>
@@ -248,10 +244,6 @@ function HomePage() {
                       </span>
                     )}
                   </div>
-
-                  {showEdit && (
-                    <EditTask task={task} onClose={handleCloseModal} />
-                  )}
                 </div>
               ))}
           </div>
@@ -271,7 +263,7 @@ function HomePage() {
                   <div className="absolute top-2 right-2 flex space-x-2">
                     <button
                       className="text-blue-500 hover:text-blue-700"
-                      onClick={() => handleOpenModal()}
+                      onClick={() => handleEditTask(task._id)}
                     >
                       <FaEdit />
                     </button>
@@ -327,9 +319,6 @@ function HomePage() {
                     )}
                   </div>
 
-                  {showEdit && (
-                    <EditTask task={task} onClose={handleCloseModal} />
-                  )}
                 </div>
               ))}
           </div>
@@ -349,7 +338,7 @@ function HomePage() {
                   <div className="absolute top-2 right-2 flex space-x-2">
                     <button
                       className="text-blue-500 hover:text-blue-700"
-                      onClick={() => handleOpenModal()}
+                      onClick={() => handleEditTask(task._id)}
                     >
                       <FaEdit />
                     </button>
@@ -405,10 +394,6 @@ function HomePage() {
                       </span>
                     )}
                   </div>
-
-                  {showEdit && (
-                    <EditTask task={task} onClose={handleCloseModal} />
-                  )}
                 </div>
               ))}
           </div>

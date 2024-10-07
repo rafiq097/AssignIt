@@ -8,6 +8,7 @@ import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import Spinner from "./components/Spinner";
 import { useState } from "react";
+import TaskPage from "./pages/TaskPage.jsx";
 
 function App() {
   const userData = useRecoilValue(userAtom);
@@ -33,6 +34,10 @@ function App() {
           element={
             userData?.role !== "user" ? <DashboardPage /> : <Navigate to="/" />
           }
+        />
+        <Route 
+          path="/task/:id"
+          element={<TaskPage />}
         />
       </Routes>
       <Toaster />
