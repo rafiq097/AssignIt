@@ -5,6 +5,10 @@ import { userAtom } from "../state/userAtom";
 import axios from "axios";
 import Spinner from "../components/Spinner";
 import toast from "react-hot-toast";
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { convertToRaw, ContentState, EditorState } from "draft-js";
+import draftToHtml from "draftjs-to-html";
 
 const TaskPage = () => {
   const navigate = useNavigate();
@@ -18,6 +22,11 @@ const TaskPage = () => {
     priority: "",
     dueDate: "",
   });
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+
+  const onEditorStateChange = (newEditorState) => {
+    setEditorState(newEditorState);
+  };
 
   const fetchTasksData = async () => {
     try {
@@ -30,8 +39,14 @@ const TaskPage = () => {
       const foundTask = res.data.tasks.find((task) => task._id === id);
       if (foundTask) {
         const formattedDueDate = foundTask.dueDate.split("T")[0];
+
+        const contentState = editorState.getCurrentContent();
+        const rawContentState = convertToRaw(contentState);
+        const html = draftToHtml(rawContentState);
+
         setTask({
           ...foundTask,
+          description: html,
           dueDate: formattedDueDate,
         });
       }
@@ -55,7 +70,10 @@ const TaskPage = () => {
   };
 
   const handleUpdate = async () => {
-    const updatedTask = task;
+    const rawContentState = convertToRaw(editorState.getCurrentContent());
+    const descriptionHtml = draftToHtml(rawContentState);
+    const updatedTask = { ...task, description: descriptionHtml };
+
     try {
       const response = await axios.put(
         `/tasks/update/${task._id}`,
@@ -75,130 +93,158 @@ const TaskPage = () => {
   }, []);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-5xl p-8 bg-white rounded-lg shadow-lg flex space-x-4">
-        {/* Left part */}
-        <div className="w-1/2">
-          {loading ? (
-            <Spinner />
-          ) : (
-            <form>
-              <h2 className="text-3xl font-bold text-gray-800 mb-6">
-                Edit Task Details
-              </h2>
+    <>
+      <a
+        className="flex items-center justify-center text-indigo-600 font-bold hover:underline hover:text-indigo-800 cursor-pointer transition duration-200"
+        onClick={() => navigate("/")}
+      >
+        Back to Home
+      </a>
 
-              {/* Form fields */}
-              <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Title
-                </label>
-                <input
-                  type="text"
-                  name="title"
-                  value={task.title}
-                  onChange={handleInputChange}
-                  className="w-full px-2 py-1 border rounded-lg focus:outline-none focus:border-indigo-500"
-                />
-              </div>
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="w-full max-w-5xl p-8 bg-white rounded-lg shadow-lg flex space-x-4">
+          <div className="w-1/2">
+            {loading ? (
+              <Spinner />
+            ) : (
+              <form>
+                <h2 className="text-3xl font-bold text-gray-800 mb-6">
+                  Edit Task Details
+                </h2>
 
-              <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Description
-                </label>
-                <textarea
-                  name="description"
-                  value={task.description}
-                  onChange={handleInputChange}
-                  className="w-full px-2 py-1 border rounded-lg focus:outline-none focus:border-indigo-500"
-                  rows="2"
-                />
-              </div>
+                {/* Form fields */}
+                <div className="mb-4">
+                  <label className="block text-gray-700 text-sm font-bold mb-2">
+                    Title
+                  </label>
+                  <input
+                    type="text"
+                    name="title"
+                    value={task.title}
+                    onChange={handleInputChange}
+                    className="w-full px-2 py-1 border rounded-lg focus:outline-none focus:border-indigo-500"
+                  />
+                </div>
 
-              <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Priority
-                </label>
-                <select
-                  name="priority"
-                  value={task.priority}
-                  onChange={handleInputChange}
-                  className="w-full px-2 py-1 border rounded-lg focus:outline-none focus:border-indigo-500"
-                >
-                  <option value="low">Low</option>
-                  <option value="medium">Medium</option>
-                  <option value="high">High</option>
-                </select>
-              </div>
+                {/* <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                      Description
+                    </label>
+                    <textarea
+                      name="description"
+                      value={task.description}
+                      onChange={handleInputChange}
+                      className="w-full px-2 py-1 border rounded-lg focus:outline-none focus:border-indigo-500"
+                      rows="2"
+                    />
+                  </div> */}
+                <div className="mb-4">
+                  <label className="block text-gray-700 text-sm font-bold mb-2">
+                    Description
+                  </label>
+                  <div
+                    className="w-full px-2 py-1 border rounded-lg focus:outline-none focus:border-indigo-500"
+                    dangerouslySetInnerHTML={{ __html: task.description }}
+                  ></div>
+                </div>
 
-              <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Due Date
-                </label>
-                <input
-                  type="date"
-                  name="dueDate"
-                  value={task.dueDate}
-                  onChange={handleInputChange}
-                  className="w-full px-2 py-1 border rounded-lg focus:outline-none focus:border-indigo-500"
-                />
-              </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700 text-sm font-bold mb-2">
+                    Priority
+                  </label>
+                  <select
+                    name="priority"
+                    value={task.priority}
+                    onChange={handleInputChange}
+                    className="w-full px-2 py-1 border rounded-lg focus:outline-none focus:border-indigo-500"
+                  >
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                  </select>
+                </div>
 
-              <div className="mb-4 flex space-x-2">
-                {task.status !== "assigned" && (
+                <div className="mb-4">
+                  <label className="block text-gray-700 text-sm font-bold mb-2">
+                    Due Date
+                  </label>
+                  <input
+                    type="date"
+                    name="dueDate"
+                    value={task.dueDate}
+                    onChange={handleInputChange}
+                    className="w-full px-2 py-1 border rounded-lg focus:outline-none focus:border-indigo-500"
+                  />
+                </div>
+
+                <div className="mb-4 flex space-x-2">
+                  {task.status !== "assigned" && (
+                    <button
+                      type="button"
+                      onClick={() => handleStatusChange("assigned")}
+                      className="px-2 py-1 bg-red-500 text-white font-bold rounded-lg hover:bg-red-600"
+                    >
+                      Mark as Assigned
+                    </button>
+                  )}
+                  {task.status !== "ongoing" && (
+                    <button
+                      type="button"
+                      onClick={() => handleStatusChange("ongoing")}
+                      className="px-2 py-1 bg-yellow-500 text-white font-bold rounded-lg hover:bg-yellow-600"
+                    >
+                      Mark as Ongoing
+                    </button>
+                  )}
+                  {task.status !== "completed" && (
+                    <button
+                      type="button"
+                      onClick={() => handleStatusChange("completed")}
+                      className="px-2 py-1 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600"
+                    >
+                      Mark as Completed
+                    </button>
+                  )}
+                </div>
+
+                <div className="flex justify-end">
                   <button
                     type="button"
-                    onClick={() => handleStatusChange("assigned")}
-                    className="px-2 py-1 bg-red-500 text-white font-bold rounded-lg hover:bg-red-600"
+                    onClick={handleUpdate}
+                    className="px-4 py-1 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700"
                   >
-                    Mark as Assigned
+                    Update Changes
                   </button>
-                )}
-                {task.status !== "ongoing" && (
-                  <button
-                    type="button"
-                    onClick={() => handleStatusChange("ongoing")}
-                    className="px-2 py-1 bg-yellow-500 text-white font-bold rounded-lg hover:bg-yellow-600"
-                  >
-                    Mark as Ongoing
-                  </button>
-                )}
-                {task.status !== "completed" && (
-                  <button
-                    type="button"
-                    onClick={() => handleStatusChange("completed")}
-                    className="px-2 py-1 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600"
-                  >
-                    Mark as Completed
-                  </button>
-                )}
-              </div>
+                </div>
+              </form>
+            )}
+          </div>
 
-              <div className="flex justify-end">
-                <button
-                  type="button"
-                  onClick={handleUpdate}
-                  className="px-4 py-1 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700"
-                >
-                  Update Changes
-                </button>
-              </div>
-            </form>
-          )}
-        </div>
-
-        {/* Right part */}
-        <div className="w-1/2 bg-gray-200 p-4 rounded-lg">
-          <h3 className="text-2xl font-bold text-gray-800 mb-4">
-            Additional Information
-          </h3>
-          {/* Add any content you want to display on the right side here */}
-          <p className="text-gray-700">
-            Use this section to display any additional information about the task,
-            such as comments, task history, or user information.
-          </p>
+          <div className="w-1/2 bg-gray-200 p-4 rounded-lg">
+            <Editor
+              editorState={editorState}
+              onEditorStateChange={onEditorStateChange}
+              toolbar={{
+                options: [
+                  "inline",
+                  "blockType",
+                  "fontSize",
+                  "list",
+                  "textAlign",
+                  "history",
+                ],
+                inline: {
+                  options: ["bold", "italic", "underline", "strikethrough"],
+                },
+              }}
+              wrapperClassName="wrapper-class"
+              editorClassName="editor-class"
+              toolbarClassName="toolbar-class"
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
