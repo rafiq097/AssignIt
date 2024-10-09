@@ -9,6 +9,7 @@ import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { convertToRaw, ContentState, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
+import htmlToDraft from "html-to-draftjs";
 
 const TaskPage = () => {
   const navigate = useNavigate();
@@ -40,15 +41,17 @@ const TaskPage = () => {
       if (foundTask) {
         const formattedDueDate = foundTask.dueDate.split("T")[0];
 
-        const contentState = editorState.getCurrentContent();
-        const rawContentState = convertToRaw(contentState);
-        const html = draftToHtml(rawContentState);
+        const contentState = ContentState.createFromBlockArray(
+          htmlToDraft(foundTask.description).contentBlocks
+        );
+        const editorState = EditorState.createWithContent(contentState);
 
         setTask({
           ...foundTask,
-          description: html,
+          // description: html,
           dueDate: formattedDueDate,
         });
+        setEditorState(editorState);
       }
     } catch (error) {
       console.error("Failed to fetch user tasks", error);

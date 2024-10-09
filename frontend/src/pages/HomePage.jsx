@@ -8,7 +8,7 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import EditTask from "../components/EditTask.jsx";
 import AddTodo from "../components/AddTodo.jsx";
 import { useNavigate } from "react-router-dom";
-import { Editor, EditorState, ContentState, convertFromRaw } from "draft-js";
+import { EditorState, convertFromRaw } from "draft-js";
 
 function HomePage() {
   const [tasks, setTasks] = useState([]);
@@ -134,6 +134,17 @@ function HomePage() {
     setFilteredTasks(results);
   }, [search, sortOption, tasks]);
 
+  const renderDescription = (description) => {
+    try {
+      const contentState = convertFromRaw(JSON.parse(description));
+      const editorState = EditorState.createWithContent(contentState);
+      return { __html: stateToHTML(editorState.getCurrentContent()) };
+    } catch (error) {
+      console.error("Failed to render description:", error);
+      return { __html: description };
+    }
+  };
+
   if (loading)
     return (
       <div className="flex items-center justify-center h-screen">
@@ -204,11 +215,11 @@ function HomePage() {
 
                   <h3 className="font-bold">{task.title}</h3>
                   {/* <p className="text-gray-600">{task.description}</p> */}
-                  <Editor
-                    editorState={EditorState.createWithContent(
-                      ContentState.createFromText(task.description)
+                  <div
+                    className="text-gray-600"
+                    dangerouslySetInnerHTML={renderDescription(
+                      task.description
                     )}
-                    readOnly
                   />
                   <div className="mt-2">
                     <button
@@ -283,7 +294,14 @@ function HomePage() {
                   </div>
 
                   <h3 className="font-bold">{task.title}</h3>
-                  <p className="text-gray-600">{task.description}</p>
+                  {/* <p className="text-gray-600">{task.description}</p> */}
+                  <div
+                    className="text-gray-600"
+                    dangerouslySetInnerHTML={renderDescription(
+                      task.description
+                    )}
+                  />
+
                   <div className="mt-2">
                     <button
                       className="bg-red-500 text-white text-sm px-2 py-1 rounded mr-2"
@@ -357,7 +375,14 @@ function HomePage() {
                   </div>
 
                   <h3 className="font-bold">{task.title}</h3>
-                  <p className="text-gray-600">{task.description}</p>
+                  {/* <p className="text-gray-600">{task.description}</p> */}
+                  <div
+                    className="text-gray-600"
+                    dangerouslySetInnerHTML={renderDescription(
+                      task.description
+                    )}
+                  />
+
                   <p className="text-sm text-green-500 mt-2">Task Completed</p>
                   <div className="mt-2">
                     <button

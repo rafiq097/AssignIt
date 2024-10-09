@@ -11,6 +11,7 @@ import CompletedTask from "../components/CompletedTask.jsx";
 import Spinner from "../components/Spinner.jsx";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import EditTask from "../components/EditTask.jsx";
+import { EditorState, convertFromRaw } from "draft-js";
 
 function DashboardPage() {
   const [tasks, setTasks] = useState([]);
@@ -182,6 +183,17 @@ function DashboardPage() {
     setFilteredTasks(results);
   }, [search, sortOption, tasks]);
 
+  const renderDescription = (description) => {
+    try {
+      const contentState = convertFromRaw(JSON.parse(description));
+      const editorState = EditorState.createWithContent(contentState);
+      return { __html: stateToHTML(editorState.getCurrentContent()) };
+    } catch (error) {
+      console.error("Failed to render description:", error);
+      return { __html: description };
+    }
+  };
+
   if (loading)
     return (
       <div className="flex items-center justify-center h-screen">
@@ -257,6 +269,7 @@ function DashboardPage() {
                   handleDeleteTask={handleDeleteTask}
                   showEdit={showEdit}
                   setShowEdit={setShowEdit}
+                  renderDescription={renderDescription}
                 />
               ))}
           </div>
@@ -280,6 +293,7 @@ function DashboardPage() {
                   handleDeleteTask={handleDeleteTask}
                   showEdit={showEdit}
                   setShowEdit={setShowEdit}
+                  renderDescription={renderDescription}
                 />
               ))}
           </div>
@@ -303,6 +317,7 @@ function DashboardPage() {
                   handleDeleteTask={handleDeleteTask}
                   showEdit={showEdit}
                   setShowEdit={setShowEdit}
+                  renderDescription={renderDescription}
                 />
               ))}
           </div>

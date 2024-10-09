@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { FaEdit, FaTrash } from "react-icons/fa";
@@ -16,9 +16,35 @@ const OngoingTask = ({
   handleDeleteTask,
   showEdit,
   setShowEdit,
+  renderDescription,
 }) => {
   const [selectedUser, setSelectedUser] = useState(task.assignedToEmail || "");
-  const [user] = useRecoilState(userAtom);
+  const [userData, setUserData] = useRecoilState(userAtom);
+
+  const verify = async () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      axios
+        .get("/verify", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => {
+          setUserData(res.data.user);
+        })
+        .catch((err) => {
+          console.log(err.message);
+          localStorage.removeItem("token");
+          setUserData(null);
+        });
+    } else {
+      toast.error("Please login to continue");
+      navigate("/login");
+    }
+  };
+
+  useEffect(() => {
+    verify();
+  }, []);
 
   const handleChange = (e) => {
     setSelectedUser(e.target.value);
@@ -43,8 +69,8 @@ const OngoingTask = ({
 
   return (
     <div className="relative mb-4 p-4 border border-gray-200 rounded">
-      {console.log(user)}
-      {user?.role == "admin" && (
+      {console.log(userData)}
+      {userData?.role == "admin" && (
         <div className="absolute top-2 right-2 flex space-x-2">
           <button
             className="text-blue-500 hover:text-blue-700"
@@ -62,7 +88,12 @@ const OngoingTask = ({
       )}
 
       <h3 className="font-bold">{task.title}</h3>
-      <p className="text-gray-600">{task.description}</p>
+      {/* <p className="text-gray-600">{task.description}</p> */}
+      <div
+        className="text-gray-600"
+        dangerouslySetInnerHTML={renderDescription(task.description)}
+      />
+
       <p className="text-sm text-gray-500">
         Assigned to: {task.assignedToEmail || "None"}
       </p>
