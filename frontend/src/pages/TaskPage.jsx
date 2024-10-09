@@ -71,7 +71,7 @@ const TaskPage = () => {
 
   const handleUpdate = async () => {
     const rawContentState = convertToRaw(editorState.getCurrentContent());
-    const descriptionHtml = draftToHtml(rawContentState);
+    const descriptionHtml = draftToHtml(rawContentState); // Convert to HTML
     const updatedTask = { ...task, description: descriptionHtml };
 
     try {

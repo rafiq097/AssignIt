@@ -8,6 +8,7 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import EditTask from "../components/EditTask.jsx";
 import AddTodo from "../components/AddTodo.jsx";
 import { useNavigate } from "react-router-dom";
+import { Editor, EditorState, ContentState, convertFromRaw } from "draft-js";
 
 function HomePage() {
   const [tasks, setTasks] = useState([]);
@@ -202,7 +203,13 @@ function HomePage() {
                   </div>
 
                   <h3 className="font-bold">{task.title}</h3>
-                  <p className="text-gray-600">{task.description}</p>
+                  {/* <p className="text-gray-600">{task.description}</p> */}
+                  <Editor
+                    editorState={EditorState.createWithContent(
+                      ContentState.createFromText(task.description)
+                    )}
+                    readOnly
+                  />
                   <div className="mt-2">
                     <button
                       className="bg-yellow-500 text-white text-sm px-2 py-1 rounded mr-2"
@@ -318,7 +325,6 @@ function HomePage() {
                       </span>
                     )}
                   </div>
-
                 </div>
               ))}
           </div>
