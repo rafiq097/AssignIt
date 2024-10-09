@@ -6,14 +6,12 @@ import EditTask from "../components/EditTask.jsx";
 import { useRecoilState } from "recoil";
 import { userAtom } from "../state/userAtom";
 
-
 const CompletedTask = ({
   task,
   updateTaskStatus,
   updateTaskAssignedTo,
   users,
-  handleOpenModal,
-  handleCloseModal,
+  handleEditTask,
   handleDeleteTask,
   showEdit,
   setShowEdit,
@@ -75,7 +73,7 @@ const CompletedTask = ({
         <div className="absolute top-2 right-2 flex space-x-2">
           <button
             className="text-blue-500 hover:text-blue-700"
-            onClick={() => handleOpenModal()}
+            onClick={() => handleEditTask(task._id)}
           >
             <FaEdit />
           </button>
@@ -168,7 +166,6 @@ const CompletedTask = ({
         </button>
       </div>
 
-      {showEdit && <EditTask task={task} onClose={handleCloseModal} />}
     </div>
   );
 };

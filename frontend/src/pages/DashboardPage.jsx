@@ -12,6 +12,7 @@ import Spinner from "../components/Spinner.jsx";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import EditTask from "../components/EditTask.jsx";
 import { EditorState, convertFromRaw } from "draft-js";
+import { useNavigate } from "react-router-dom";
 
 function DashboardPage() {
   const [tasks, setTasks] = useState([]);
@@ -25,13 +26,11 @@ function DashboardPage() {
   const [search, setSearch] = useState("");
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [sortOption, setSortOption] = useState("none");
+  const navigate = useNavigate();
 
-  const handleOpenModal = () => {
-    setShowEdit(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowEdit(false);
+  const handleEditTask = (id) => {
+    console.log(id);
+    navigate(`/task/${id}`);
     fetchTasksData();
   };
 
@@ -264,8 +263,7 @@ function DashboardPage() {
                   updateTaskStatus={updateTaskStatus}
                   updateTaskAssignedTo={updateTaskAssignedTo}
                   users={users}
-                  handleOpenModal={handleOpenModal}
-                  handleCloseModal={handleCloseModal}
+                  handleEditTask={handleEditTask}
                   handleDeleteTask={handleDeleteTask}
                   showEdit={showEdit}
                   setShowEdit={setShowEdit}
@@ -288,8 +286,7 @@ function DashboardPage() {
                   updateTaskStatus={updateTaskStatus}
                   updateTaskAssignedTo={updateTaskAssignedTo}
                   users={users}
-                  handleOpenModal={handleOpenModal}
-                  handleCloseModal={handleCloseModal}
+                  handleEditTask={handleEditTask}
                   handleDeleteTask={handleDeleteTask}
                   showEdit={showEdit}
                   setShowEdit={setShowEdit}
@@ -312,8 +309,7 @@ function DashboardPage() {
                   updateTaskStatus={updateTaskStatus}
                   updateTaskAssignedTo={updateTaskAssignedTo}
                   users={users}
-                  handleOpenModal={handleOpenModal}
-                  handleCloseModal={handleCloseModal}
+                  handleEditTask={handleEditTask}
                   handleDeleteTask={handleDeleteTask}
                   showEdit={showEdit}
                   setShowEdit={setShowEdit}
