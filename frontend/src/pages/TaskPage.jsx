@@ -14,6 +14,7 @@ import htmlToDraft from "html-to-draftjs";
 const TaskPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  console.log(id);
   const [userData, setUserData] = useRecoilState(userAtom);
   const [loading, setLoading] = useState(false);
   const [task, setTask] = useState({
@@ -34,12 +35,14 @@ const TaskPage = () => {
       setLoading(true);
       const token = localStorage.getItem("token");
 
-      const res = await axios.get(`/tasks/get`, {
+      const res = await axios.get(`/tasks/gettasks`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      console.log(res.data.tasks);
       const foundTask = res.data.tasks.find((task) => task._id === id);
+      console.log(foundTask);
       if (foundTask) {
-        const formattedDueDate = foundTask.dueDate.split("T")[0];
+        const formattedDueDate = foundTask.dueDate?.split("T")[0];
 
         const contentState = ContentState.createFromBlockArray(
           htmlToDraft(foundTask.description).contentBlocks
@@ -48,7 +51,6 @@ const TaskPage = () => {
 
         setTask({
           ...foundTask,
-          // description: html,
           dueDate: formattedDueDate,
         });
         setEditorState(editorState);
@@ -74,7 +76,7 @@ const TaskPage = () => {
 
   const handleUpdate = async () => {
     const rawContentState = convertToRaw(editorState.getCurrentContent());
-    const descriptionHtml = draftToHtml(rawContentState); // Convert to HTML
+    const descriptionHtml = draftToHtml(rawContentState);
     const updatedTask = { ...task, description: descriptionHtml };
 
     try {
@@ -97,12 +99,20 @@ const TaskPage = () => {
 
   return (
     <>
-      <a
-        className="flex items-center justify-center text-indigo-600 font-bold hover:underline hover:text-indigo-800 cursor-pointer transition duration-200"
-        onClick={() => navigate("/")}
-      >
-        Back to Home
-      </a>
+      <div className="flex items-center justify-center text-indigo-600 font-bold hover:underline hover:text-indigo-800 cursor-pointer transition duration-200">
+        <a
+          className="w-1/2 flex items-center justify-center"
+          onClick={() => navigate("/")}
+        >
+          Back to Home
+        </a>
+        <a
+          className="w-1/2 flex items-center justify-center"
+          onClick={() => navigate("/dashboard")}
+        >
+          Back to Dashboard
+        </a>
+      </div>
 
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <div className="w-full max-w-5xl p-8 bg-white rounded-lg shadow-lg flex space-x-4">
