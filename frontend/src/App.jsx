@@ -9,6 +9,7 @@ import DashboardPage from "./pages/DashboardPage";
 import Spinner from "./components/Spinner";
 import { useState } from "react";
 import TaskPage from "./pages/TaskPage.jsx";
+import ViewTask from "./pages/ViewTask.jsx";
 
 function App() {
   const userData = useRecoilValue(userAtom);
@@ -39,6 +40,11 @@ function App() {
           path="/task/:id"
           element={<TaskPage />}
         />
+        <Route 
+          path="/viewtask/:id"
+          element={<ViewTask />}
+        />
+        
       </Routes>
       <Toaster />
     </div>
