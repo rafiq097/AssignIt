@@ -196,7 +196,7 @@ function HomePage() {
               .map((task) => (
                 <div
                   key={task._id}
-                  onDoubleClick={() => navigate(`/viewtask/task._id`)}
+                  onDoubleClick={() => navigate(`/viewtask/${task._id}`)}
                   className="relative mb-4 p-4 border border-gray-200 rounded"
                 >
                   <div className="absolute top-2 right-2 flex space-x-2">
@@ -277,7 +277,7 @@ function HomePage() {
               .map((task) => (
                 <div
                   key={task._id}
-                  onDoubleClick={() => navigate(`/viewtask/task._id`)}
+                  onDoubleClick={() => navigate(`/viewtask/${task._id}`)}
                   className="relative mb-4 p-4 border border-gray-200 rounded"
                 >
                   <div className="absolute top-2 right-2 flex space-x-2">
@@ -359,7 +359,7 @@ function HomePage() {
               .map((task) => (
                 <div
                   key={task._id}
-                  onDoubleClick={() => navigate(`/viewtask/task._id`)}
+                  onDoubleClick={() => navigate(`/viewtask/${task._id}`)}
                   className="relative mb-4 p-4 border border-gray-200 rounded"
                 >
                   <div className="absolute top-2 right-2 flex space-x-2">
