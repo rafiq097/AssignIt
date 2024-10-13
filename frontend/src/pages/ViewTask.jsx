@@ -159,7 +159,7 @@ const ViewTask = () => {
                 <div className="flex justify-end">
                   <button
                     type="button"
-                    onClick={() => navigate(`/edittask/${task._id}`)}
+                    onClick={() => navigate(`/task/${task._id}`)}
                     className="px-4 py-1 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700"
                   >
                     Update Changes
