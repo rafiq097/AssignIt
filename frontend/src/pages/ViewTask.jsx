@@ -47,7 +47,6 @@ const ViewTask = () => {
     }
   };
 
-
   useEffect(() => {
     fetchTasksData();
   }, []);
@@ -69,108 +68,102 @@ const ViewTask = () => {
         </a>
       </div>
 
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <div className="w-full max-w-5xl p-8 bg-white rounded-lg shadow-lg flex space-x-4">
-          <div className="w-1/2">
-            {loading ? (
-              <Spinner />
-            ) : (
-              <form>
-                <h2 className="text-3xl font-bold text-gray-800 mb-6">
-                  View Task Details
-                </h2>
+      <div className="flex items-center justify-center min-h-screen bg-gray-100 w-full p-8">
+        {loading ? (
+          <Spinner />
+        ) : (
+          <form className="w-2/3">
+            <h2 className="text-3xl font-bold text-gray-800 mb-6">
+              Task Details
+            </h2>
 
-                {/* Form fields */}
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-bold mb-2">
-                    Title
-                  </label>
-                  <input
-                    type="text"
-                    name="title"
-                    value={task.title}
-                    className="w-full px-2 py-1 border rounded-lg focus:outline-none focus:border-indigo-500"
-                  />
-                </div>
+            {/* Form fields */}
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Title
+              </label>
+              <p className="w-full px-2 py-1 border rounded-lg focus:outline-none focus:border-indigo-500">
+                {task.title}
+              </p>
+            </div>
 
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">
-                      Description
-                    </label>
-                    <textarea
-                      name="description"
-                      value={task.description}
-                      className="w-full px-2 py-1 border rounded-lg focus:outline-none focus:border-indigo-500"
-                      rows="2"
-                    />
-                  </div>
+            {/* <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                  Description
+                </label>
+                <textarea
+                  name="description"
+                  value={task.description}
+                  className="w-full px-2 py-1 border rounded-lg focus:outline-none focus:border-indigo-500"
+                  rows="2"
+                />
+              </div> */}
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Description
+              </label>
+              <div
+                className="w-full px-2 py-1 border rounded-lg focus:outline-none focus:border-indigo-500"
+                dangerouslySetInnerHTML={{ __html: task.description }}
+              ></div>
+            </div>
 
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-bold mb-2">
-                    Priority
-                  </label>
-                  <select
-                    name="priority"
-                    value={task.priority}
-                    className="w-full px-2 py-1 border rounded-lg focus:outline-none focus:border-indigo-500"
-                  >
-                  </select>
-                </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Priority
+              </label>
+              <p className="w-full px-2 py-1 border rounded-lg focus:outline-none focus:border-indigo-500">
+                {task.priority}
+              </p>
+            </div>
 
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-bold mb-2">
-                    Due Date
-                  </label>
-                  <input
-                    type="date"
-                    name="dueDate"
-                    value={task.dueDate}
-                    className="w-full px-2 py-1 border rounded-lg focus:outline-none focus:border-indigo-500"
-                  />
-                </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Due Date
+              </label>
+              <p className="w-full px-2 py-1 border rounded-lg focus:outline-none focus:border-indigo-500">
+                {task.dueDate}
+              </p>
+            </div>
 
-                <div className="mb-4 flex space-x-2">
-                  {task.status === "assigned" && (
-                    <button
-                      type="button"
-                      className="px-2 py-1 bg-red-500 text-white font-bold rounded-lg hover:bg-red-600"
-                    >
-                      Assigned
-                    </button>
-                  )}
-                  {task.status === "ongoing" && (
-                    <button
-                      type="button"
-                      className="px-2 py-1 bg-yellow-500 text-white font-bold rounded-lg hover:bg-yellow-600"
-                    >
-                      Ongoing
-                    </button>
-                  )}
-                  {task.status === "completed" && (
-                    <button
-                      type="button"
-                      className="px-2 py-1 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600"
-                    >
-                      Completed
-                    </button>
-                  )}
-                </div>
+            <div className="mb-4 flex space-x-2">
+              {task.status === "assigned" && (
+                <button
+                  type="button"
+                  className="px-2 py-1 bg-red-500 text-white font-bold rounded-lg hover:bg-red-600"
+                >
+                  Assigned
+                </button>
+              )}
+              {task.status === "ongoing" && (
+                <button
+                  type="button"
+                  className="px-2 py-1 bg-yellow-500 text-white font-bold rounded-lg hover:bg-yellow-600"
+                >
+                  Ongoing
+                </button>
+              )}
+              {task.status === "completed" && (
+                <button
+                  type="button"
+                  className="px-2 py-1 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600"
+                >
+                  Completed
+                </button>
+              )}
+            </div>
 
-                <div className="flex justify-end">
-                  <button
-                    type="button"
-                    onClick={() => navigate(`/task/${task._id}`)}
-                    className="px-4 py-1 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700"
-                  >
-                    Update Changes
-                  </button>
-                </div>
-              </form>
-            )}
-          </div>
-
-
-        </div>
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={() => navigate(`/task/${task._id}`)}
+                className="px-4 py-1 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700"
+              >
+                Update
+              </button>
+            </div>
+          </form>
+        )}
       </div>
     </>
   );
