@@ -8,7 +8,7 @@ import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import Spinner from "./components/Spinner";
 import { useState } from "react";
-import TaskPage from "./pages/TaskPage.jsx";
+import EditTask from "./pages/EditTask.jsx";
 import ViewTask from "./pages/ViewTask.jsx";
 
 function App() {
@@ -38,7 +38,7 @@ function App() {
         />
         <Route 
           path="/task/:id"
-          element={<TaskPage />}
+          element={<EditTask />}
         />
         <Route 
           path="/viewtask/:id"

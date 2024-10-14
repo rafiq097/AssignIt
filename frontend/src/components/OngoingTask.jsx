@@ -5,6 +5,7 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import EditTask from "../components/EditTask.jsx";
 import { useRecoilState } from "recoil";
 import { userAtom } from "../state/userAtom";
+import { useNavigate } from "react-router-dom";
 
 const OngoingTask = ({
   task,
@@ -19,6 +20,7 @@ const OngoingTask = ({
 }) => {
   const [selectedUser, setSelectedUser] = useState(task.assignedToEmail || "");
   const [userData, setUserData] = useRecoilState(userAtom);
+  const navigate = useNavigate();
 
   const verify = async () => {
     const token = localStorage.getItem("token");
@@ -67,7 +69,10 @@ const OngoingTask = ({
   };
 
   return (
-    <div className="relative mb-4 p-4 border border-gray-200 rounded">
+    <div
+      onDoubleClick={() => navigate(`/viewtask/${task._id}`)}
+      className="relative mb-4 p-4 border border-gray-200 rounded"
+    >
       {console.log(userData)}
       {userData?.role == "admin" && (
         <div className="absolute top-2 right-2 flex space-x-2">

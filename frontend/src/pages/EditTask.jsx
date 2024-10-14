@@ -11,7 +11,7 @@ import { convertToRaw, ContentState, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 
-const TaskPage = () => {
+const EditTask = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   console.log(id);
@@ -262,4 +262,4 @@ const TaskPage = () => {
   );
 };
 
-export default TaskPage;
+export default EditTask;
