@@ -27,7 +27,11 @@ const taskSchema = new mongoose.Schema({
     },
     assignedToEmail: {
         type: String
-    }
+    },
+    subTasks: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Task'
+    }]
 });
 
 const Task = mongoose.model("Task", taskSchema);
