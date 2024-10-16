@@ -134,16 +134,16 @@ function HomePage() {
     setFilteredTasks(results);
   }, [search, sortOption, tasks]);
 
-  const renderDescription = (description) => {
-    try {
-      const contentState = convertFromRaw(JSON.parse(description));
-      const editorState = EditorState.createWithContent(contentState);
-      return { __html: stateToHTML(editorState.getCurrentContent()) };
-    } catch (error) {
-      console.error("Failed to render description:", error);
-      return { __html: description };
-    }
-  };
+  // const renderDescription = (description) => {
+  //   try {
+  //     const contentState = convertFromRaw(JSON.parse(description));
+  //     const editorState = EditorState.createWithContent(contentState);
+  //     return { __html: stateToHTML(editorState.getCurrentContent()) };
+  //   } catch (error) {
+  //     console.error("Failed to render description:", error);
+  //     return { __html: description };
+  //   }
+  // };
 
   if (loading)
     return (
@@ -218,9 +218,15 @@ function HomePage() {
                   {/* <p className="text-gray-600">{task.description}</p> */}
                   <div
                     className="text-gray-600"
-                    dangerouslySetInnerHTML={renderDescription(
-                      task.description
-                    )}
+                    // dangerouslySetInnerHTML={renderDescription(
+                    //   task.description
+                    // )}
+                    dangerouslySetInnerHTML={{
+                      __html: task.description.replace(
+                        /a /g,
+                        'a style="color: blue; text-decoration: underline;" '
+                      ),
+                    }}
                   />
                   <div className="mt-2">
                     <button
@@ -299,9 +305,12 @@ function HomePage() {
                   {/* <p className="text-gray-600">{task.description}</p> */}
                   <div
                     className="text-gray-600"
-                    dangerouslySetInnerHTML={renderDescription(
-                      task.description
-                    )}
+                    dangerouslySetInnerHTML={{
+                      __html: task.description.replace(
+                        /a /g,
+                        'a style="color: blue; text-decoration: underline;" '
+                      ),
+                    }}
                   />
 
                   <div className="mt-2">
@@ -381,9 +390,12 @@ function HomePage() {
                   {/* <p className="text-gray-600">{task.description}</p> */}
                   <div
                     className="text-gray-600"
-                    dangerouslySetInnerHTML={renderDescription(
-                      task.description
-                    )}
+                    dangerouslySetInnerHTML={{
+                      __html: task.description.replace(
+                        /a /g,
+                        'a style="color: blue; text-decoration: underline;" '
+                      ),
+                    }}
                   />
 
                   <p className="text-sm text-green-500 mt-2">Task Completed</p>

@@ -14,9 +14,6 @@ const AssignedTask = ({
   users,
   handleEditTask,
   handleDeleteTask,
-  showEdit,
-  setShowEdit,
-  renderDescription,
 }) => {
   const [selectedUser, setSelectedUser] = useState(task.assignedToEmail || "");
   const [userData, setUserData] = useRecoilState(userAtom);
@@ -96,7 +93,12 @@ const AssignedTask = ({
       {/* <p className="text-gray-600">{task.description}</p> */}
       <div
         className="text-gray-600"
-        dangerouslySetInnerHTML={renderDescription(task.description)}
+        dangerouslySetInnerHTML={{
+          __html: task.description.replace(
+            /a /g,
+            'a style="color: blue; text-decoration: underline;" '
+          ),
+        }}
       />
 
       <p className="text-sm text-gray-500">

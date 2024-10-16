@@ -182,17 +182,6 @@ function DashboardPage() {
     setFilteredTasks(results);
   }, [search, sortOption, tasks]);
 
-  const renderDescription = (description) => {
-    try {
-      const contentState = convertFromRaw(JSON.parse(description));
-      const editorState = EditorState.createWithContent(contentState);
-      return { __html: stateToHTML(editorState.getCurrentContent()) };
-    } catch (error) {
-      console.error("Failed to render description:", error);
-      return { __html: description };
-    }
-  };
-
   if (loading)
     return (
       <div className="flex items-center justify-center h-screen">
@@ -265,9 +254,6 @@ function DashboardPage() {
                   users={users}
                   handleEditTask={handleEditTask}
                   handleDeleteTask={handleDeleteTask}
-                  showEdit={showEdit}
-                  setShowEdit={setShowEdit}
-                  renderDescription={renderDescription}
                 />
               ))}
           </div>
@@ -288,9 +274,6 @@ function DashboardPage() {
                   users={users}
                   handleEditTask={handleEditTask}
                   handleDeleteTask={handleDeleteTask}
-                  showEdit={showEdit}
-                  setShowEdit={setShowEdit}
-                  renderDescription={renderDescription}
                 />
               ))}
           </div>
@@ -311,9 +294,6 @@ function DashboardPage() {
                   users={users}
                   handleEditTask={handleEditTask}
                   handleDeleteTask={handleDeleteTask}
-                  showEdit={showEdit}
-                  setShowEdit={setShowEdit}
-                  renderDescription={renderDescription}
                 />
               ))}
           </div>

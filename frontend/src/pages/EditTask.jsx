@@ -144,7 +144,12 @@ const EditTask = () => {
                 </label>
                 <div
                   className="w-full px-4 py-2 border rounded-lg bg-gray-50"
-                  dangerouslySetInnerHTML={{ __html: task.description }}
+                  dangerouslySetInnerHTML={{ 
+                    __html: task.description.replace(
+                      /a /g,
+                      'a style="color: blue; text-decoration: underline;" '
+                    )
+                  }}
                 ></div>
               </div>
 
