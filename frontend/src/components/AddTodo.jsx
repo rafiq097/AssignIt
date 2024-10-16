@@ -2,14 +2,13 @@ import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 
-const AddTodo = ({ fetchTasksData }) => {
-  const [isFormVisible, setIsFormVisible] = useState(false);
+const AddTodo = ({ fetchTasksData, isFormVisible, setIsFormVisible, priority }) => {
   const [users, setUsers] = useState([]);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     status: "assigned",
-    priority: "low",
+    priority: priority ?? "low",
     dueDate: "",
     assignedToEmail: ""
   });
@@ -56,7 +55,7 @@ const AddTodo = ({ fetchTasksData }) => {
     <div className="container mx-auto p-4">
       <div className="flex justify-center mb-4">
         <button
-          className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+          className="bg-blue-500 text-white px-4 py-2 rounded mr-2 click-sub-task"
           onClick={() => setIsFormVisible((prev) => !prev)}
         >
           {isFormVisible ? "Cancel" : "Add New Task"}

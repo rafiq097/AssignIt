@@ -5,10 +5,9 @@ import { userAtom } from "../state/userAtom";
 import toast from "react-hot-toast";
 import Spinner from "../components/Spinner.jsx";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import EditTask from "../components/EditTask.jsx";
+import { IoAddCircleOutline } from "react-icons/io5";
 import AddTodo from "../components/AddTodo.jsx";
 import { useNavigate } from "react-router-dom";
-import { EditorState, convertFromRaw } from "draft-js";
 
 function HomePage() {
   const [tasks, setTasks] = useState([]);
@@ -17,7 +16,24 @@ function HomePage() {
   const [search, setSearch] = useState("");
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [sortOption, setSortOption] = useState("none");
+  const [parent, setParent] = useState({
+    title: "",
+    priority: "low",
+  });
+  const [clickedParent, setClickedParent] = useState(false);
+  const [isFormVisible, setIsFormVisible] = useState(false);
   const navigate = useNavigate();
+
+  const handleAddSubTask = (title, priority) => {
+    setParent({ title: title, priority: priority });
+    setIsFormVisible(true);
+    setClickedParent(true);
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: "smooth",
+    });
+    console.log(parent);
+  };
 
   const handleEditTask = (id) => {
     console.log(id);
@@ -269,6 +285,15 @@ function HomePage() {
                       </span>
                     )}
                   </div>
+                  <div>
+                    <IoAddCircleOutline
+                      size={30}
+                      onClick={() => {
+                        console.log(task.title, task.priority);
+                        handleAddSubTask(task.title, task.priority);
+                      }}
+                    />
+                  </div>
                 </div>
               ))}
           </div>
@@ -445,7 +470,13 @@ function HomePage() {
           </div>
         </div>
       </div>
-      <AddTodo fetchTasksData={fetchTasksData} />
+      {clickedParent && parent && <h2 className="flex justify-center font-bold font-serif text-blue-500">Enter Details for Sub Task under Task {parent.title}</h2>}
+      <AddTodo
+        fetchTasksData={fetchTasksData}
+        isFormVisible={isFormVisible}
+        setIsFormVisible={setIsFormVisible}
+        priority={parent.priority} 
+      />
     </>
   );
 }
