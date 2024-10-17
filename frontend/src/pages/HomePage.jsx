@@ -435,7 +435,7 @@ function HomePage() {
                       {task.subTasks.map((subTask, index) => (
                         <div
                           key={index}
-                          className="mb-2 p-2 border border-gray-300 rounded bg-gray-50 rounded"
+                          className="mb-2 p-2 border border-gray-300 rounded bg-gray-50"
                         >
                           <h4 className="text-sm font-bold">{subTask.title}</h4>
                           <div
@@ -550,7 +550,7 @@ function HomePage() {
                       {task.subTasks.map((subTask, index) => (
                         <div
                           key={index}
-                          className="mb-2 p-2 border border-gray-300 rounded bg-gray-50 rounded"
+                          className="mb-2 p-2 border border-gray-300 rounded bg-gray-50"
                         >
                           <h4 className="text-sm font-bold">{subTask.title}</h4>
                           <div

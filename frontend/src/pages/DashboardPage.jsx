@@ -10,6 +10,7 @@ import OngoingTask from "../components/OngoingTask.jsx";
 import CompletedTask from "../components/CompletedTask.jsx";
 import Spinner from "../components/Spinner.jsx";
 import { useNavigate } from "react-router-dom";
+import SubTask from "../components/SubTask.jsx";
 
 function DashboardPage() {
   const [tasks, setTasks] = useState([]);
@@ -23,12 +24,43 @@ function DashboardPage() {
   const [search, setSearch] = useState("");
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [sortOption, setSortOption] = useState("none");
+  const [parent, setParent] = useState({});
+  const [clickedParent, setClickedParent] = useState(false);
   const navigate = useNavigate();
+
+  const handleAddSubTask = (task) => {
+    setParent(task);
+    setClickedParent(true);
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: "smooth",
+    });
+    console.log(parent);
+  };
 
   const handleEditTask = (id) => {
     console.log(id);
     navigate(`/task/${id}`);
     fetchTasksData();
+  };
+
+  const handleSubEditTask = (pId, id) => {
+    console.log(pId, id);
+    navigate(`/task/${pId}/${id}`);
+    fetchTasksData();
+  };
+
+  const deleteSubTask = async (pId, id) => {
+    console.log(pId, id);
+    try {
+      const response = await axios.delete(`/tasks/delete-subtask/${pId}/${id}`);
+      console.log(response.data);
+      toast.success("Sub Task deleted successfully!");
+      fetchTasksData();
+    } catch (error) {
+      console.error("Failed to delete sub task:", error);
+      toast.error("Failed to delete sub task.");
+    }
   };
 
   const handleDeleteTask = async (id) => {
@@ -251,6 +283,9 @@ function DashboardPage() {
                   users={users}
                   handleEditTask={handleEditTask}
                   handleDeleteTask={handleDeleteTask}
+                  handleAddSubTask={handleAddSubTask}
+                  handleSubEditTask={handleSubEditTask}
+                  deleteSubTask={deleteSubTask}
                 />
               ))}
           </div>
@@ -271,6 +306,9 @@ function DashboardPage() {
                   users={users}
                   handleEditTask={handleEditTask}
                   handleDeleteTask={handleDeleteTask}
+                  handleAddSubTask={handleAddSubTask}
+                  handleSubEditTask={handleSubEditTask}
+                  deleteSubTask={deleteSubTask}
                 />
               ))}
           </div>
@@ -291,11 +329,26 @@ function DashboardPage() {
                   users={users}
                   handleEditTask={handleEditTask}
                   handleDeleteTask={handleDeleteTask}
+                  handleAddSubTask={handleAddSubTask}
+                  handleSubEditTask={handleSubEditTask}
+                  deleteSubTask={deleteSubTask}
                 />
               ))}
           </div>
         </div>
       </div>
+      {clickedParent && parent && (
+        <div>
+          <h2 className="flex justify-center font-bold text-blue-500">
+            Sub Task
+          </h2>
+          <h2 className="flex justify-center font-bold font-serif text-blue-500">
+            Enter Details for Sub Task under Task {parent.title}
+          </h2>
+
+          <SubTask fetchTasksData={fetchTasksData} task={parent} />
+        </div>
+      )}
       {user?.role == "admin" && (
         <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
           <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center">

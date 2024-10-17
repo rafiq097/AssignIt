@@ -66,14 +66,14 @@ const AddTodo = ({ fetchTasksData, task }) => {
           <input
             type="text"
             name="title"
-            placeholder="Enter task title"
+            placeholder="Enter SubTask title"
             value={formData.title}
             onChange={handleChange}
             className="border rounded p-2 w-full"
           />
           <textarea
             name="description"
-            placeholder="Enter task description"
+            placeholder="Enter SubTask description"
             value={formData.description}
             onChange={handleChange}
             className="border rounded p-2 w-full"
