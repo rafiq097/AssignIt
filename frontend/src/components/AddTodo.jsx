@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 
-const AddTodo = ({ fetchTasksData, isFormVisible, setIsFormVisible, priority }) => {
+const AddTodo = ({ fetchTasksData }) => {
+  const [isFormVisible, setIsFormVisible] = useState(false);
   const [users, setUsers] = useState([]);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     status: "assigned",
-    priority: priority ?? "low",
+    priority: "low",
     dueDate: "",
     assignedToEmail: ""
   });

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import axios from "axios";
 import { userAtom } from "../state/userAtom.js";
 import NavBar from "../components/NavBar.jsx";
@@ -9,9 +9,6 @@ import AssignedTask from "../components/AssignedTask.jsx";
 import OngoingTask from "../components/OngoingTask.jsx";
 import CompletedTask from "../components/CompletedTask.jsx";
 import Spinner from "../components/Spinner.jsx";
-import { FaEdit, FaTrash } from "react-icons/fa";
-import EditTask from "../components/EditTask.jsx";
-import { EditorState, convertFromRaw } from "draft-js";
 import { useNavigate } from "react-router-dom";
 
 function DashboardPage() {

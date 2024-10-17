@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import EditTask from "../components/EditTask.jsx";
 import { useRecoilState } from "recoil";
 import { userAtom } from "../state/userAtom";
 import { useNavigate } from "react-router-dom";

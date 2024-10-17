@@ -7,10 +7,10 @@ import Spinner from "../components/Spinner";
 import toast from "react-hot-toast";
 import JoditEditor from "jodit-react";
 
-const EditTask = () => {
+const EditSubTask = () => {
   const navigate = useNavigate();
-  const { id } = useParams();
-  console.log(id);
+  const { parentId, subTaskId } = useParams();
+  console.log(parentId, subTaskId);
   const [userData, setUserData] = useRecoilState(userAtom);
   const [loading, setLoading] = useState(false);
   const [task, setTask] = useState({
@@ -32,16 +32,30 @@ const EditTask = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log(res.data.tasks);
-      const foundTask = res.data.tasks.find((task) => task._id === id);
+      const foundTask = res.data.tasks.find((task) => task._id === parentId);
       console.log(foundTask);
       if (foundTask) {
-        const formattedDueDate = foundTask.dueDate?.split("T")[0];
+        if (subTaskId) {
+          let sub = foundTask.subTasks.find((task) => task._id === subTaskId);
+          console.log(sub);
+          if (sub) {
+            const formattedDueDate = sub.dueDate?.split("T")[0];
 
-        setTask({
-          ...foundTask,
-          dueDate: formattedDueDate,
-        });
-        setContent(foundTask.description);
+            setTask({
+              ...sub,
+              dueDate: formattedDueDate,
+            });
+            setContent(sub.description);
+          }
+        } else {
+          const formattedDueDate = foundTask.dueDate?.split("T")[0];
+
+          setTask({
+            ...foundTask,
+            dueDate: formattedDueDate,
+          });
+          setContent(foundTask.description);
+        }
       }
     } catch (error) {
       console.error("Failed to fetch user tasks", error);
@@ -73,13 +87,13 @@ const EditTask = () => {
 
   const handleUpdate = async () => {
     try {
-      const response = await axios.put(`/tasks/update/${task._id}`, task);
+      const response = await axios.put(`/tasks/update-subtask/${parentId}/${task._id}`, task);
       console.log(response.data);
-      toast.success("Task Edited successfully!");
+      toast.success("Sub Task Edited successfully!");
       navigate("/");
     } catch (error) {
-      console.error("Failed to update task:", error);
-      toast.error("Failed to update task.");
+      console.error("Failed to update Sub task:", error);
+      toast.error("Failed to update Sub task.");
     }
   };
 
@@ -179,7 +193,7 @@ const EditTask = () => {
                 <input
                   type="date"
                   name="dueDate"
-                  value={task.dueDate}
+                  value={task?.dueDate}
                   onChange={handleInputChange}
                   className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-indigo-500"
                 />
@@ -272,4 +286,4 @@ const EditTask = () => {
   );
 };
 
-export default EditTask;
+export default EditSubTask;

@@ -9,6 +9,7 @@ import DashboardPage from "./pages/DashboardPage";
 import Spinner from "./components/Spinner";
 import { useState } from "react";
 import EditTask from "./pages/EditTask.jsx";
+import EditSubTask from "./pages/EditSubTask.jsx";
 import ViewTask from "./pages/ViewTask.jsx";
 
 function App() {
@@ -39,6 +40,10 @@ function App() {
         <Route 
           path="/task/:id"
           element={<EditTask />}
+        />
+        <Route 
+          path="/task/:parentId/:subTaskId"
+          element={<EditSubTask />}
         />
         <Route 
           path="/viewtask/:id"
