@@ -20,6 +20,9 @@ const EditSubTask = () => {
     priority: "",
     dueDate: "",
   });
+  const priorityLevels = ["low", "medium", "high", "urgent"];
+  const parentPriorityIndex = priorityLevels.indexOf(task.priority);
+  const availablePriorities = priorityLevels.slice(parentPriorityIndex);
   const editor = useRef(null);
   const [content, setContent] = useState("");
 
@@ -87,7 +90,10 @@ const EditSubTask = () => {
 
   const handleUpdate = async () => {
     try {
-      const response = await axios.put(`/tasks/update-subtask/${parentId}/${task._id}`, task);
+      const response = await axios.put(
+        `/tasks/update-subtask/${parentId}/${task._id}`,
+        task
+      );
       console.log(response.data);
       toast.success("Sub Task Edited successfully!");
       navigate("/");
@@ -179,10 +185,11 @@ const EditSubTask = () => {
                   onChange={handleInputChange}
                   className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-indigo-500"
                 >
-                  <option value="low">Low</option>
-                  <option value="medium">Medium</option>
-                  <option value="high">High</option>
-                  <option value="urgent">Urgent</option>
+                  {availablePriorities.map((level) => (
+                    <option key={level} value={level}>
+                      {level.charAt(0).toUpperCase() + level.slice(1)}
+                    </option>
+                  ))}
                 </select>
               </div>
 

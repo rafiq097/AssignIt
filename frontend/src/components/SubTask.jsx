@@ -8,7 +8,7 @@ const AddTodo = ({ fetchTasksData, task }) => {
     title: "",
     description: "",
     status: "assigned",
-    priority: "low",
+    priority: "",
     dueDate: "",
     assignedToEmail: "",
   });
@@ -18,8 +18,11 @@ const AddTodo = ({ fetchTasksData, task }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log(name, value);
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
+  // const handlePriorityChange = (e.target.value)
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -37,6 +40,7 @@ const AddTodo = ({ fetchTasksData, task }) => {
 
   const handleAddSubTask = async (event) => {
     event.preventDefault();
+    console.log(formData);
     if (formData?.title.trim() === "") {
       return;
     }
