@@ -6,7 +6,6 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Toaster } from "react-hot-toast";
 import { RecoilRoot } from "recoil";
 import { BrowserRouter } from "react-router-dom";
-
 import axios from "axios";
 
 axios.interceptors.request.use(
