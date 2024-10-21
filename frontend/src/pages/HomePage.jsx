@@ -6,9 +6,8 @@ import toast from "react-hot-toast";
 import Spinner from "../components/Spinner.jsx";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { IoAddCircleOutline } from "react-icons/io5";
-import AddTodo from "../components/AddTodo.jsx";
 import { useNavigate } from "react-router-dom";
-import SubTask from "../components/SubTask.jsx";
+import AddSubTask from "../components/AddSubTask.jsx";
 
 function HomePage() {
   const [tasks, setTasks] = useState([]);
@@ -17,19 +16,7 @@ function HomePage() {
   const [search, setSearch] = useState("");
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [sortOption, setSortOption] = useState("none");
-  const [parent, setParent] = useState({});
-  const [clickedParent, setClickedParent] = useState(false);
   const navigate = useNavigate();
-
-  const handleAddSubTask = (task) => {
-    setParent(task);
-    setClickedParent(true);
-    window.scrollTo({
-      top: document.documentElement.scrollHeight,
-      behavior: "smooth",
-    });
-    console.log(parent);
-  };
 
   const handleAddTask = () => {
     navigate("/addtask");
@@ -294,15 +281,7 @@ function HomePage() {
                     )}
                   </div>
                   <div className="mt-4 flex ">
-                    <div className="flex flex-col items-center w-1/5">
-                      <IoAddCircleOutline
-                        size={30}
-                        onClick={() => handleAddSubTask(task)}
-                      />
-                      <span className="text-sm font-medium">Sub</span>
-                    </div>
-
-                    <div className="w-4/5 ml-4">
+                    <div className="w-4/5 ml-7">
                       {task.subTasks.map((subTask, index) => (
                         <div
                           key={index}
@@ -430,15 +409,7 @@ function HomePage() {
                   </div>
 
                   <div className="mt-4 flex ">
-                    <div className="flex flex-col items-center w-1/5">
-                      <IoAddCircleOutline
-                        size={30}
-                        onClick={() => handleAddSubTask(task)}
-                      />
-                      <span className="text-sm font-medium">Sub</span>
-                    </div>
-
-                    <div className="w-4/5 ml-4">
+                    <div className="w-4/5 ml-7">
                       {task.subTasks.map((subTask, index) => (
                         <div
                           key={index}
@@ -545,15 +516,7 @@ function HomePage() {
                     )}
                   </div>
                   <div className="mt-4 flex ">
-                    <div className="flex flex-col items-center w-1/5">
-                      <IoAddCircleOutline
-                        size={30}
-                        onClick={() => handleAddSubTask(task)}
-                      />
-                      <span className="text-sm font-medium">Sub</span>
-                    </div>
-
-                    <div className="w-4/5 ml-4">
+                    <div className="w-4/5 ml-7">
                       {task.subTasks.map((subTask, index) => (
                         <div
                           key={index}
@@ -587,16 +550,6 @@ function HomePage() {
           Add Task
         </button>
       </div>
-
-      {clickedParent && parent && (
-        <div>
-          <h2 className="flex justify-center font-bold font-serif text-blue-500">
-            Enter Details for Sub Task under Task {parent.title}
-          </h2>
-
-          <SubTask fetchTasksData={fetchTasksData} task={parent} />
-        </div>
-      )}
     </>
   );
 }

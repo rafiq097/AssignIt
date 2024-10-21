@@ -2,15 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import axios from "axios";
 import { userAtom } from "../state/userAtom.js";
-import NavBar from "../components/NavBar.jsx";
 import toast from "react-hot-toast";
-import AddTodo from "../components/AddTodo.jsx";
 import AssignedTask from "../components/AssignedTask.jsx";
 import OngoingTask from "../components/OngoingTask.jsx";
 import CompletedTask from "../components/CompletedTask.jsx";
 import Spinner from "../components/Spinner.jsx";
 import { useNavigate } from "react-router-dom";
-import SubTask from "../components/SubTask.jsx";
+import AddSubTask from "../components/AddSubTask.jsx";
 
 function DashboardPage() {
   const [tasks, setTasks] = useState([]);
