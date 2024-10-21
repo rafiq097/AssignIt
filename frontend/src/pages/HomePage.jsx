@@ -104,6 +104,8 @@ function HomePage() {
           console.log(err.message);
           localStorage.removeItem("token");
           setUserData(null);
+          setLoading(false);
+          navigate("/login");
         });
     } else {
       toast.error("Please login to continue");

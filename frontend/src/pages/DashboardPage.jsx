@@ -92,32 +92,42 @@ function DashboardPage() {
     }
   };
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const res = await axios.get("/users/getusers");
-        setUsers(res.data.users);
-      } catch (error) {
-        console.error("Failed to fetch users", error);
-      }
-    };
+  const fetchUsers = async () => {
+    try {
+      const res = await axios.get("/users/getusers");
+      setUsers(res.data.users);
+    } catch (error) {
+      console.error("Failed to fetch users", error);
+    }
+  };
 
-    const updateUserStatus = async () => {
-      try {
-        const token = localStorage.getItem("token");
-
-        const res = await axios.get(`/verify`, {
+  const verify = async () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      axios
+        .get("/verify", {
           headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => {
+          setUserData(res.data.user);
+        })
+        .catch((err) => {
+          console.log(err.message);
+          localStorage.removeItem("token");
+          setUserData(null);
+          setLoading(false);
+          navigate("/login");
         });
+    } else {
+      toast.error("Please login to continue");
+      navigate("/login");
+    }
+  };
 
-        setUser(res.data.user);
-        setUserData(user);
-      } catch {}
-    };
-
+  useEffect(() => {
     fetchTasksData();
     fetchUsers();
-    updateUserStatus();
+    verify();
   }, []);
 
   const updateTaskStatus = async (taskId, status) => {
@@ -270,13 +280,13 @@ function DashboardPage() {
         </div>
 
         <div className="flex justify-center my-6">
-        <button
-          className="text-white bg-blue-500 hover:bg-blue-600 font-semibold py-2 px-4 rounded-md shadow-md"
-          onClick={handleAddTask}
-        >
-          Add Task
-        </button>
-      </div>
+          <button
+            className="text-white bg-blue-500 hover:bg-blue-600 font-semibold py-2 px-4 rounded-md shadow-md"
+            onClick={handleAddTask}
+          >
+            Add Task
+          </button>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Assigned Tasks */}

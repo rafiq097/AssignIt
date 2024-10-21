@@ -52,7 +52,7 @@ const handleLogin = async (x) => {
 
     console.log(res);
     localStorage.setItem("token", res.data.token);
-    await setUserData(res.data.user);
+    setUserData(res.data.user);
 
     toast.success("Login Success");
     navigate("/");
