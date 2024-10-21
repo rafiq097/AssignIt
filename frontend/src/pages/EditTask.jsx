@@ -6,6 +6,7 @@ import axios from "axios";
 import Spinner from "../components/Spinner";
 import toast from "react-hot-toast";
 import JoditEditor from "jodit-react";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 const EditTask = () => {
   const navigate = useNavigate();
@@ -50,6 +51,25 @@ const EditTask = () => {
     }
   };
 
+  const handleSubEditTask = (pId, id) => {
+    console.log(pId, id);
+    navigate(`/task/${pId}/${id}`);
+    fetchTasksData();
+  };
+
+  const deleteSubTask = async (pId, id) => {
+    console.log(pId, id);
+    try {
+      const response = await axios.delete(`/tasks/delete-subtask/${pId}/${id}`);
+      console.log(response.data);
+      toast.success("Sub Task deleted successfully!");
+      fetchTasksData();
+    } catch (error) {
+      console.error("Failed to delete sub task:", error);
+      toast.error("Failed to delete sub task.");
+    }
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setTask((prevTask) => ({
@@ -89,21 +109,6 @@ const EditTask = () => {
 
   return (
     <>
-      <div className="flex items-center justify-center text-indigo-600 font-bold hover:underline hover:text-indigo-800 cursor-pointer transition duration-200 mb-4">
-        <a
-          className="w-1/2 flex items-center justify-center"
-          onClick={() => navigate("/")}
-        >
-          Back to Home
-        </a>
-        <a
-          className="w-1/2 flex items-center justify-center"
-          onClick={() => navigate("/dashboard")}
-        >
-          Back to Dashboard
-        </a>
-      </div>
-
       <div className="flex flex-col items-center min-h-screen bg-gray-100 py-6">
         <div className="w-full max-w-4xl p-8 bg-white rounded-lg shadow-lg mb-6">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">
@@ -224,8 +229,27 @@ const EditTask = () => {
                     task.subTasks.map((subTask, index) => (
                       <div
                         key={index}
-                        className="p-4 border border-gray-300 rounded-lg bg-gray-50 flex flex-col"
+                        className="relative p-4 border border-gray-300 rounded-lg bg-gray-50 flex flex-col"
                       >
+                        <div className="absolute top-2 right-2 flex space-x-2">
+                            <button
+                              className="text-blue-500 hover:text-blue-700"
+                              onClick={() =>
+                                handleSubEditTask(task._id, subTask._id)
+                              }
+                            >
+                              <FaEdit size={15} />
+                            </button>
+                            <button
+                              className="text-red-500 hover:text-red-700"
+                              onClick={() =>
+                                deleteSubTask(task._id, subTask._id)
+                              }
+                            >
+                              <FaTrash size={15} />
+                            </button>
+                          </div>
+
                         <h4 className="text-sm font-bold text-indigo-700 mb-1">
                           {subTask.title}
                         </h4>

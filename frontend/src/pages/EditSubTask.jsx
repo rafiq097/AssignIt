@@ -109,21 +109,6 @@ const EditSubTask = () => {
 
   return (
     <>
-      <div className="flex items-center justify-center text-indigo-600 font-bold hover:underline hover:text-indigo-800 cursor-pointer transition duration-200 mb-4">
-        <a
-          className="w-1/2 flex items-center justify-center"
-          onClick={() => navigate("/")}
-        >
-          Back to Home
-        </a>
-        <a
-          className="w-1/2 flex items-center justify-center"
-          onClick={() => navigate("/dashboard")}
-        >
-          Back to Dashboard
-        </a>
-      </div>
-
       <div className="flex flex-col items-center min-h-screen bg-gray-100 py-6">
         <div className="w-full max-w-4xl p-8 bg-white rounded-lg shadow-lg mb-6">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">

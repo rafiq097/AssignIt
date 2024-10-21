@@ -52,59 +52,37 @@ const ViewTask = () => {
   }, []);
 
   return (
-    <>
-      <div className="flex items-center justify-center text-indigo-600 font-bold hover:underline hover:text-indigo-800 cursor-pointer transition duration-200">
-        <a
-          className="w-1/2 flex items-center justify-center"
-          onClick={() => navigate("/")}
-        >
-          Back to Home
-        </a>
-        <a
-          className="w-1/2 flex items-center justify-center"
-          onClick={() => navigate("/dashboard")}
-        >
-          Back to Dashboard
-        </a>
-      </div>
-
-      <div className="flex items-center justify-center min-h-screen bg-gray-100 w-full p-8">
+    <div className="flex flex-col items-center min-h-screen bg-gray-100 py-6">
+      <div className="w-full max-w-4xl p-8 bg-white rounded-lg shadow-lg">
         {loading ? (
           <Spinner />
         ) : (
-          <form className="w-2/3">
-            <h2 className="text-3xl font-bold text-gray-800 mb-6">
+          <div>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6">
               Task Details
             </h2>
 
-            {/* Form fields */}
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">
                 Title
               </label>
-              <p className="w-full px-2 py-1 border rounded-lg focus:outline-none focus:border-indigo-500">
+              <div className="w-full px-4 py-2 border rounded-lg bg-gray-50">
                 {task.title}
-              </p>
+              </div>
             </div>
 
-            {/* <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Description
-                </label>
-                <textarea
-                  name="description"
-                  value={task.description}
-                  className="w-full px-2 py-1 border rounded-lg focus:outline-none focus:border-indigo-500"
-                  rows="2"
-                />
-              </div> */}
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">
                 Description
               </label>
               <div
-                className="w-full px-2 py-1 border rounded-lg focus:outline-none focus:border-indigo-500"
-                dangerouslySetInnerHTML={{ __html: task.description }}
+                className="w-full px-4 py-2 border rounded-lg bg-gray-50"
+                dangerouslySetInnerHTML={{
+                  __html: task.description.replace(
+                    /a /g,
+                    'a style="color: blue; text-decoration: underline;" '
+                  ),
+                }}
               ></div>
             </div>
 
@@ -112,60 +90,73 @@ const ViewTask = () => {
               <label className="block text-gray-700 text-sm font-bold mb-2">
                 Priority
               </label>
-              <p className="w-full px-2 py-1 border rounded-lg focus:outline-none focus:border-indigo-500">
+              <div className="w-full px-4 py-2 border rounded-lg bg-gray-50">
                 {task.priority}
-              </p>
+              </div>
             </div>
 
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">
                 Due Date
               </label>
-              <p className="w-full px-2 py-1 border rounded-lg focus:outline-none focus:border-indigo-500">
+              <div className="w-full px-4 py-2 border rounded-lg bg-gray-50">
                 {task.dueDate}
-              </p>
+              </div>
             </div>
 
-            <div className="mb-4 flex space-x-2">
-              {task.status === "assigned" && (
-                <button
-                  type="button"
-                  className="px-2 py-1 bg-red-500 text-white font-bold rounded-lg hover:bg-red-600"
-                >
-                  Assigned
-                </button>
-              )}
-              {task.status === "ongoing" && (
-                <button
-                  type="button"
-                  className="px-2 py-1 bg-yellow-500 text-white font-bold rounded-lg hover:bg-yellow-600"
-                >
-                  Ongoing
-                </button>
-              )}
-              {task.status === "completed" && (
-                <button
-                  type="button"
-                  className="px-2 py-1 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600"
-                >
-                  Completed
-                </button>
-              )}
-            </div>
+            <div className="mb-4">
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                Sub Tasks
+              </h3>
+              <div className="space-y-4">
+                {task.subTasks && task.subTasks.length > 0 ? (
+                  task.subTasks.map((subTask, index) => (
+                    <div
+                      key={index}
+                      className="p-4 border border-gray-300 rounded-lg bg-gray-50 flex flex-col"
+                    >
+                      <h4 className="text-sm font-bold text-indigo-700 mb-1">
+                        {subTask.title}
+                      </h4>
+                      <p className="text-xs text-gray-600 mb-2">
+                        {subTask.description}
+                      </p>
+                      <span
+                        className={`text-xs font-medium ${
+                          subTask.priority === "urgent"
+                            ? "text-red-600"
+                            : subTask.priority === "high"
+                            ? "text-orange-600"
+                            : subTask.priority === "medium"
+                            ? "text-yellow-600"
+                            : "text-green-600"
+                        }`}
+                      >
+                        Priority: {subTask.priority}
+                      </span>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-gray-600 text-sm">
+                    No sub-tasks available.
+                  </p>
+                )}
 
-            <div className="flex justify-center">
-              <button
-                type="button"
-                onClick={() => navigate(`/task/${task._id}`)}
-                className="px-4 py-1 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700"
-              >
-                Update Task
-              </button>
+                <div className="flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() => navigate(`/task/${task._id}`)}
+                    className="px-4 py-1 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700"
+                  >
+                    Edit Task
+                  </button>
+                </div>
+              </div>
             </div>
-          </form>
+          </div>
         )}
       </div>
-    </>
+    </div>
   );
 };
 
