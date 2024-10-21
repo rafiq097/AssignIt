@@ -172,6 +172,7 @@ const AddTask = () => {
                   index={index}
                   subTask={subTask}
                   users={users}
+                  parentPriority={formData.priority}
                   onSubTaskChange={(updatedSubTask) =>
                     handleSubTaskChange(index, updatedSubTask)
                   }
