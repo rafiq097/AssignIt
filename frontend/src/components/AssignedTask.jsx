@@ -14,7 +14,6 @@ const AssignedTask = ({
   users,
   handleEditTask,
   handleDeleteTask,
-  handleAddSubTask,
   handleSubEditTask,
   deleteSubTask,
 }) => {
@@ -177,41 +176,34 @@ const AssignedTask = ({
         </button>
       </div>
 
-      <div className="mt-4 flex ">
-        <div className="flex flex-col items-center w-1/5">
-          <IoAddCircleOutline
-            size={30}
-            onClick={() => handleAddSubTask(task)}
-          />
-          <span className="text-sm font-medium">Sub</span>
-        </div>
-
-        <div className="w-4/5 ml-4">
+      <div className="mt-4 flex">
+        <div className="w-4/5 ml-7">
           {task.subTasks.map((subTask, index) => (
             <div
               key={index}
-              className="mb-2 p-2 border border-gray-300 rounded bg-gray-50 relative"
+              className="mb-4 p-4 border border-gray-300 rounded-lg bg-white shadow hover:shadow-lg transition duration-300 ease-in-out relative"
             >
-              <div className="absolute top-2 right-2 flex space-x-2">
+              <div className="absolute top-6 right-3 flex space-x-2">
                 <button
-                  className="text-blue-500 hover:text-blue-700"
+                  className="text-blue-500 hover:text-blue-700 transition duration-150 ease-in-out"
                   onClick={() => handleSubEditTask(task._id, subTask._id)}
+                  title="Edit Subtask"
                 >
                   <FaEdit size={15} />
                 </button>
                 <button
-                  className="text-red-500 hover:text-red-700"
+                  className="text-red-500 hover:text-red-700 transition duration-150 ease-in-out"
                   onClick={() => deleteSubTask(task._id, subTask._id)}
+                  title="Delete Subtask"
                 >
                   <FaTrash size={15} />
                 </button>
               </div>
-              <h4 className="text-sm font-bold">{subTask.title}</h4>
-              {/* <p className="text-xs text-gray-600">
-                            {subTask.description}
-                          </p> */}
+              <h4 className="text-lg font-semibold text-gray-800 mb-1">
+                {subTask.title}
+              </h4>
               <div
-                className="text-xs text-gray-600"
+                className="text-sm text-gray-600"
                 dangerouslySetInnerHTML={{
                   __html: subTask.description.replace(
                     /a /g,
@@ -219,6 +211,14 @@ const AssignedTask = ({
                   ),
                 }}
               />
+              <div className="mt-2 flex justify-between text-xs text-gray-500">
+                {subTask.dueDate && (
+                  <span>
+                    Due: {new Date(subTask.dueDate).toLocaleDateString()}
+                  </span>
+                )}
+                <span>Priority: {subTask.priority}</span>
+              </div>
             </div>
           ))}
         </div>

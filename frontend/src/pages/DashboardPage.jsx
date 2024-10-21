@@ -22,19 +22,7 @@ function DashboardPage() {
   const [search, setSearch] = useState("");
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [sortOption, setSortOption] = useState("none");
-  const [parent, setParent] = useState({});
-  const [clickedParent, setClickedParent] = useState(false);
   const navigate = useNavigate();
-
-  const handleAddSubTask = (task) => {
-    setParent(task);
-    setClickedParent(true);
-    window.scrollTo({
-      top: document.documentElement.scrollHeight,
-      behavior: "smooth",
-    });
-    console.log(parent);
-  };
 
   const handleAddTask = () => {
     navigate("/addtask");
@@ -303,7 +291,6 @@ function DashboardPage() {
                   users={users}
                   handleEditTask={handleEditTask}
                   handleDeleteTask={handleDeleteTask}
-                  handleAddSubTask={handleAddSubTask}
                   handleSubEditTask={handleSubEditTask}
                   deleteSubTask={deleteSubTask}
                 />
@@ -326,7 +313,6 @@ function DashboardPage() {
                   users={users}
                   handleEditTask={handleEditTask}
                   handleDeleteTask={handleDeleteTask}
-                  handleAddSubTask={handleAddSubTask}
                   handleSubEditTask={handleSubEditTask}
                   deleteSubTask={deleteSubTask}
                 />
@@ -349,7 +335,6 @@ function DashboardPage() {
                   users={users}
                   handleEditTask={handleEditTask}
                   handleDeleteTask={handleDeleteTask}
-                  handleAddSubTask={handleAddSubTask}
                   handleSubEditTask={handleSubEditTask}
                   deleteSubTask={deleteSubTask}
                 />
@@ -357,18 +342,7 @@ function DashboardPage() {
           </div>
         </div>
       </div>
-      {clickedParent && parent && (
-        <div>
-          <h2 className="flex justify-center font-bold text-blue-500">
-            Sub Task
-          </h2>
-          <h2 className="flex justify-center font-bold font-serif text-blue-500">
-            Enter Details for Sub Task under Task {parent.title}
-          </h2>
 
-          <SubTask fetchTasksData={fetchTasksData} task={parent} />
-        </div>
-      )}
       {user?.role == "admin" && (
         <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
           <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center">
