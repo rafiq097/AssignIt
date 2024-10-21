@@ -11,6 +11,7 @@ import { useState } from "react";
 import EditTask from "./pages/EditTask.jsx";
 import EditSubTask from "./pages/EditSubTask.jsx";
 import ViewTask from "./pages/ViewTask.jsx";
+import AddTask from "./pages/AddTask.jsx";
 
 function App() {
   const userData = useRecoilValue(userAtom);
@@ -49,7 +50,10 @@ function App() {
           path="/viewtask/:id"
           element={<ViewTask />}
         />
-        
+        <Route 
+          path="/addtask"
+          element={<AddTask />}
+        />
       </Routes>
       <Toaster />
     </div>

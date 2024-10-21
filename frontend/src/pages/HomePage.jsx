@@ -31,6 +31,11 @@ function HomePage() {
     console.log(parent);
   };
 
+  const handleAddTask = () => {
+    navigate("/addtask");
+    fetchTasksData();
+  };
+
   const handleEditTask = (id) => {
     console.log(id);
     navigate(`/task/${id}`);
@@ -572,7 +577,14 @@ function HomePage() {
         </div>
       </div>
 
-      <AddTodo fetchTasksData={fetchTasksData} />
+      <div className="flex justify-center my-6">
+        <button
+          className="text-white bg-blue-500 hover:bg-blue-600 font-semibold py-2 px-4 rounded-md shadow-md"
+          onClick={handleAddTask}
+        >
+          Add Task
+        </button>
+      </div>
 
       {clickedParent && parent && (
         <div>
