@@ -232,23 +232,21 @@ const EditTask = () => {
                         className="relative p-4 border border-gray-300 rounded-lg bg-gray-50 flex flex-col"
                       >
                         <div className="absolute top-2 right-2 flex space-x-2">
-                            <button
-                              className="text-blue-500 hover:text-blue-700"
-                              onClick={() =>
-                                handleSubEditTask(task._id, subTask._id)
-                              }
-                            >
-                              <FaEdit size={15} />
-                            </button>
-                            <button
-                              className="text-red-500 hover:text-red-700"
-                              onClick={() =>
-                                deleteSubTask(task._id, subTask._id)
-                              }
-                            >
-                              <FaTrash size={15} />
-                            </button>
-                          </div>
+                          <button
+                            className="text-blue-500 hover:text-blue-700"
+                            onClick={() =>
+                              handleSubEditTask(task._id, subTask._id)
+                            }
+                          >
+                            <FaEdit size={15} />
+                          </button>
+                          <button
+                            className="text-red-500 hover:text-red-700"
+                            onClick={() => deleteSubTask(task._id, subTask._id)}
+                          >
+                            <FaTrash size={15} />
+                          </button>
+                        </div>
 
                         <h4 className="text-sm font-bold text-indigo-700 mb-1">
                           {subTask.title}
