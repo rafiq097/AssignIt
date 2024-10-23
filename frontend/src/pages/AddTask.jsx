@@ -101,17 +101,18 @@ const AddTask = () => {
   };
 
   return (
-    <div className="container max-w-4xl mx-auto p-8 bg-gray-50 min-h-screen flex flex-col items-center">
-      <div className="w-full max-w-2xl p-8 bg-white rounded-lg shadow-lg mb-6">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4 text-center">
+    <div className="container max-w-4xl mx-auto p-4 md:p-8 bg-gray-50 min-h-screen flex flex-col items-center">
+      <div className="w-full max-w-2xl p-4 md:p-8 bg-white rounded-lg shadow-lg mb-6">
+        <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-4 text-center">
           Edit Task Description
         </h2>
         <JoditEditor
           ref={editor}
           value={content}
-          tabIndex={1}
+          tabIndex={0}
           onBlur={(newContent) => setContent(newContent)}
           className="border rounded-lg p-2 w-full"
+          style={{ height: '100px' }}
         />
       </div>
 
