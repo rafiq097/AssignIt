@@ -211,6 +211,17 @@ const AssignedTask = ({
                   ),
                 }}
               />
+              <p
+                className={`text-sm ${
+                  subTask.status === "assigned"
+                    ? "text-red-600"
+                    : subTask.status === "ongoing"
+                    ? "text-yellow-600"
+                    : "text-green-600"
+                }`}
+              >
+                {subTask.status}
+              </p>
               <div className="mt-2 flex justify-between text-xs text-gray-500">
                 {subTask.dueDate && (
                   <span>

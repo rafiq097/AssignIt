@@ -8,7 +8,7 @@ const checkTaskStatus = async (req, res, next) => {
         for (let i = 0; i < tasks.length; i++) {
             const allSubTasksCompleted = tasks[i].subTasks.every(subTask => subTask.status === "completed");
 
-            if (allSubTasksCompleted && tasks[i].status !== "completed") {
+            if (allSubTasksCompleted && tasks[i].status !== "completed" && tasks[i].subTasks.length > 0) {
                 tasks[i].status = "completed";
                 await tasks[i].save();
                 completedCount++;
