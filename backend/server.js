@@ -11,6 +11,8 @@ const userRoutes = require("./routes/user.routes.js");
 const taskRoutes = require("./routes/task.routes.js");
 // const teamRoutes = require("./routes/team.routes.js");
 
+const checkTaskStatus = require("./utils/checkTaskStatus.js");
+
 app.use(express.static(path.join(__dirname, '..', 'frontend', 'dist')));
 
 // app.use(cors());
@@ -25,7 +27,7 @@ app.use(express.urlencoded({extended: true}));
 
 connectDB();
 app.use("/users", userRoutes);
-app.use("/tasks", taskRoutes);
+app.use("/tasks", checkTaskStatus, taskRoutes);
 // app.use("/teams", teamRoutes);
 
 app.get('/verify', verifyToken, (req, res) => {
