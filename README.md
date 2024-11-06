@@ -19,7 +19,7 @@ npm install
 npm run dev
 ```
 
-### 2. Visit http://localhost:5173 to view 
+### 2. Visit http://localhost:5173 to View 
 
 Backend API requests may slow down due to render free service policy.
 We urge you to wait and proceed. 
